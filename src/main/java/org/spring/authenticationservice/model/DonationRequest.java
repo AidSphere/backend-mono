@@ -19,12 +19,10 @@ public class DonationRequest {
     private Long patientId;
 
     @CreatedDate
-    private Date createdAt;
+    private Date createdAt = new Date();
 
-    @Column(nullable = true)
     private String hospitalName;
 
-    @Column(nullable = true)
     private String massageToPatient;
 
     @Column(nullable = false)
@@ -32,7 +30,7 @@ public class DonationRequest {
 
     @Column(nullable = false)
     @Enumerated(EnumType.STRING)
-    private StatusEnum Status;
+    private StatusEnum Status = StatusEnum.PENDING;
 
     private Long AdminId;
 
