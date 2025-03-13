@@ -1,4 +1,4 @@
-package org.spring.authenticationservice.model.Enum;
+package org.spring.authenticationservice.model.donor;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.Column;
