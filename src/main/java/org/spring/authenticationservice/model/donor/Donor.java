@@ -38,6 +38,18 @@ public class Donor {
     @Column(nullable = true)
     private String description;
 
+    public String getProfileUrl() {
+        return profileUrl;
+    }
+
+    public void setProfileUrl(String profileUrl) {
+        this.profileUrl = profileUrl;
+    }
+
+    @JsonProperty("profileUrl")
+    @Column(nullable = true)
+    private String profileUrl;
+
     public Long getId() {
         return id;
     }
