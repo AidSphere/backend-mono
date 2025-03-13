@@ -1,7 +1,6 @@
-package org.spring.authenticationservice.model;
+package org.spring.authenticationservice.model.security;
 
 import jakarta.persistence.*;
-import lombok.Setter;
 
 import java.util.ArrayList;
 import java.util.List;

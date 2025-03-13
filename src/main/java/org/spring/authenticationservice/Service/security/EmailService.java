@@ -1,4 +1,4 @@
-package org.spring.authenticationservice.Service;
+package org.spring.authenticationservice.Service.security;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;

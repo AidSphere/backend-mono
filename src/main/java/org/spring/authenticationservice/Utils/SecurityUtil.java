@@ -1,6 +1,6 @@
 package org.spring.authenticationservice.Utils;
 
-import org.spring.authenticationservice.model.UserPrinciple;
+import org.spring.authenticationservice.model.security.UserPrinciple;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;

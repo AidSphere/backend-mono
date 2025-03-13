@@ -1,14 +1,14 @@
-package org.spring.authenticationservice.Service;
+package org.spring.authenticationservice.Service.security;
 
 import io.jsonwebtoken.Claims;
-import org.spring.authenticationservice.DTO.LoginUserDto;
-import org.spring.authenticationservice.DTO.RegisterUserDto;
-import org.spring.authenticationservice.model.Role;
-import org.spring.authenticationservice.model.TokenType;
-import org.spring.authenticationservice.model.User;
-import org.spring.authenticationservice.model.VerificationToken;
-import org.spring.authenticationservice.repository.RoleRepository;
-import org.spring.authenticationservice.repository.UserRepository;
+import org.spring.authenticationservice.DTO.security.LoginUserDto;
+import org.spring.authenticationservice.DTO.security.RegisterUserDto;
+import org.spring.authenticationservice.model.security.Role;
+import org.spring.authenticationservice.model.security.TokenType;
+import org.spring.authenticationservice.model.security.User;
+import org.spring.authenticationservice.model.security.VerificationToken;
+import org.spring.authenticationservice.repository.security.RoleRepository;
+import org.spring.authenticationservice.repository.security.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;

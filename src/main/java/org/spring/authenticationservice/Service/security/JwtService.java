@@ -1,4 +1,4 @@
-package org.spring.authenticationservice.Service;
+package org.spring.authenticationservice.Service.security;
 
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.io.Decoders;
@@ -6,7 +6,7 @@ import io.jsonwebtoken.security.Keys;
 import io.jsonwebtoken.security.SignatureException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.spring.authenticationservice.model.Role;
+import org.spring.authenticationservice.model.security.Role;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 

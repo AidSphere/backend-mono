@@ -1,6 +1,6 @@
-package org.spring.authenticationservice.config;
+package org.spring.authenticationservice.config.security;
 
-import org.spring.authenticationservice.Service.UserDetailServiceImpl;
+import org.spring.authenticationservice.Service.security.UserDetailServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

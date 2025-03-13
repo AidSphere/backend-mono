@@ -1,4 +1,4 @@
-package org.spring.authenticationservice.model;
+package org.spring.authenticationservice.model.security;
 
 import jakarta.persistence.*;
 

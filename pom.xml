@@ -72,10 +72,10 @@
 
 
         <dependency>
-            <groupId>org.springframework.cloud</groupId>
-            <artifactId>spring-cloud-starter-netflix-eureka-client</artifactId>
-            <version>4.2.0</version>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-data-redis</artifactId>
         </dependency>
+
 
 
         <!-- https://mvnrepository.com/artifact/io.github.cdimascio/java-dotenv -->

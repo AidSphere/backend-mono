@@ -1,8 +1,8 @@
-package org.spring.authenticationservice.Service;
+package org.spring.authenticationservice.Service.security;
 
-import org.spring.authenticationservice.model.User;
-import org.spring.authenticationservice.model.UserPrinciple;
-import org.spring.authenticationservice.repository.UserRepository;
+import org.spring.authenticationservice.model.security.User;
+import org.spring.authenticationservice.model.security.UserPrinciple;
+import org.spring.authenticationservice.repository.security.UserRepository;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;

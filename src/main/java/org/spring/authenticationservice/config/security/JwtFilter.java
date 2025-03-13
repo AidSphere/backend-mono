@@ -1,12 +1,11 @@
-package org.spring.authenticationservice.config;
+package org.spring.authenticationservice.config.security;
 
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import jakarta.ws.rs.core.SecurityContext;
-import org.spring.authenticationservice.Service.JwtService;
-import org.spring.authenticationservice.Service.UserDetailServiceImpl;
+import org.spring.authenticationservice.Service.security.JwtService;
+import org.spring.authenticationservice.Service.security.UserDetailServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;

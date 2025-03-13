@@ -1,8 +1,8 @@
-package org.spring.authenticationservice.Service;
+package org.spring.authenticationservice.Service.security;
 
-import org.spring.authenticationservice.model.VerificationToken;
-import org.spring.authenticationservice.model.TokenType;
-import org.spring.authenticationservice.repository.VerificationTokenRepository;
+import org.spring.authenticationservice.model.security.VerificationToken;
+import org.spring.authenticationservice.model.security.TokenType;
+import org.spring.authenticationservice.repository.security.VerificationTokenRepository;
 import org.springframework.stereotype.Service;
 import java.time.LocalDateTime;
 import java.util.Optional;

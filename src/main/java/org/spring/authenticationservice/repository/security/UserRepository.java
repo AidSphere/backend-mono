@@ -1,7 +1,7 @@
-package org.spring.authenticationservice.repository;
+package org.spring.authenticationservice.repository.security;
 
 import jakarta.transaction.Transactional;
-import org.spring.authenticationservice.model.User;
+import org.spring.authenticationservice.model.security.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;

@@ -1,7 +1,7 @@
-package org.spring.authenticationservice.repository;
+package org.spring.authenticationservice.repository.security;
 
-import org.spring.authenticationservice.model.TokenType;
-import org.spring.authenticationservice.model.VerificationToken;
+import org.spring.authenticationservice.model.security.TokenType;
+import org.spring.authenticationservice.model.security.VerificationToken;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.Optional;
