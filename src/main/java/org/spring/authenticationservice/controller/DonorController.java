@@ -59,6 +59,17 @@ public class DonorController {
         }
     }
 
+    @GetMapping("/profile/{donorId}")
+    public ResponseEntity<?> getProfile(@PathVariable Long donorId) {
+        try{
+
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+
+        return null;
+    }
+
 
 
 
