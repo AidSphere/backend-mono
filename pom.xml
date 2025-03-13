@@ -9,10 +9,10 @@
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
     <groupId>org.spring</groupId>
-    <artifactId>authentication-service</artifactId>
+    <artifactId>aidSphere-BE</artifactId>
     <version>0.0.1-SNAPSHOT</version>
-    <name>authentication-service</name>
-    <description>authentication-service</description>
+    <name>aidSphere-BE</name>
+    <description>aidSphere-BE</description>
     <url/>
     <licenses>
         <license/>
