@@ -38,8 +38,25 @@ public class DonorController {
     }
 
     @GetMapping("/donations/{donorId}")
-    public List<Donation> getDonationHistory(@PathVariable Long donorId) {
-        return donorService.getDonationHistory(donorId);
+    public ResponseEntity<?> getDonationHistory(@PathVariable Long donorId) {
+        try {
+            List<Donation> donations = donorService.getDonationHistory(donorId);
+
+            // If no donations found, return a 404 Not Found
+            if (donations.isEmpty()) {
+                return new ResponseEntity<>("No donations found for donor ID: " + donorId, HttpStatus.NOT_FOUND);
+            }
+
+            // Return the donations with a 200 OK status
+            return ResponseEntity.ok(donations);
+
+        } catch (RuntimeException e) {
+            // Handle specific exception (e.g., no donation history found)
+            return new ResponseEntity<>("Error: " + e.getMessage(), HttpStatus.BAD_REQUEST);
+        } catch (Exception e) {
+            // Handle any other unexpected exceptions
+            return new ResponseEntity<>("Internal server error: " + e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+        }
     }
 
 

@@ -34,11 +34,12 @@ public class DonorService {
     }
 
     public List<Donation> getDonationHistory(Long donorId) {
-        List<Donation> donations = donationRepository.findDonationByDonorid(donorId); // Use donorid instead of DonationID
-        if (donations.isEmpty()) {
-            throw new RuntimeException("No donation history found for donor ID: " + donorId);
+        try {
+            List<Donation> donations = donationRepository.findDonationByDonorid(donorId);
+            return donations;
+        } catch (Exception e) {
+            throw new RuntimeException("Error occurred while fetching donation history for donor ID: " + donorId, e);
         }
-        return donations;
     }
 
 
