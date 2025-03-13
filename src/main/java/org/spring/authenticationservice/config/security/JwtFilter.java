@@ -33,12 +33,6 @@ public class JwtFilter extends OncePerRequestFilter {
         String jwtToken = null;
         String username = null;
 
-        String requestPath = request.getRequestURI();
-
-        if (requestPath.matches("^/(login|register|validate|activate).*")) {
-            filterChain.doFilter(request, response);
-            return;
-        }
 
         // Extract JWT token
         if (authHeader != null && authHeader.startsWith("Bearer ")) {

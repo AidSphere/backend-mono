@@ -1,4 +1,4 @@
-package org.spring.authenticationservice.repository;
+package org.spring.authenticationservice.repository.security.donor;
 
 
 import org.spring.authenticationservice.model.donor.Donor;

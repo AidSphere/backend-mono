@@ -3,11 +3,14 @@ package org.spring.authenticationservice.controller;
 
 import org.spring.authenticationservice.DTO.UserSurveyRequestDTO;
 import org.spring.authenticationservice.Service.DonorService;
+import org.spring.authenticationservice.model.donor.Donation;
 import org.spring.authenticationservice.model.donor.Donor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 
 @RestController
@@ -27,5 +30,19 @@ public class DonorController {
         Donor updateDonor=donorService.saveDescriptionForDonor(id,surveyDTO);
         return new ResponseEntity<>(HttpStatus.ACCEPTED);
     }
+
+    @PostMapping("/donations")
+    public ResponseEntity<?> addDonation(@RequestBody Donation donation) {
+        Donation donation1 =donorService.saveDonationDetails(donation);
+        return new ResponseEntity<>(donation1,HttpStatus.CREATED);
+    }
+
+    @GetMapping("/donations/{donorId}")
+    public List<Donation> getDonationHistory(@PathVariable Long donorId) {
+        return donorService.getDonationHistory(donorId);
+    }
+
+
+
 
 }
