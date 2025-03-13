@@ -1,5 +1,6 @@
 package org.spring.authenticationservice.model;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.*;
 import lombok.Data;
 import org.spring.authenticationservice.model.Enum.StatusEnum;
@@ -9,30 +10,38 @@ import java.util.Date;
 
 @Entity
 @Data
-@Table(name = "donationRequest")
-public class DonationRequest {
+public class DonationPatientRequests {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @JsonProperty("id")
     private Long id;
 
+    @JsonProperty("patientId")
     private Long patientId;
 
     @CreatedDate
-    private Date createdAt = new Date();
+    @Temporal(TemporalType.TIMESTAMP)
+    private Date createdAt;
 
+    @JsonProperty("hospitalName")
     private String hospitalName;
 
-    private String massageToPatient;
+    @JsonProperty("massageToPatient")
+    private String messageToPatient;
 
     @Column(nullable = false)
+    @JsonProperty("prescriptionLink")
     private String prescriptionLink;
 
-    @Column(nullable = false,name = "status")
+    @Column(nullable = false)
     @Enumerated(EnumType.STRING)
+    @JsonProperty("status")
     private StatusEnum status = StatusEnum.PENDING;
 
-    private Long AdminId;
+    @JsonProperty("adminId")
+    private Long adminId;
 
-    private Date AdminApprovedDate;
+    @JsonProperty("adminApprovedDate")
+    private Date adminApprovedDate;
 }
