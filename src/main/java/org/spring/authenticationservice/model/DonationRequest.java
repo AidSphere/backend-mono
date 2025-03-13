@@ -13,7 +13,7 @@ import java.util.Date;
 public class DonationRequest {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     private Long patientId;
@@ -28,9 +28,9 @@ public class DonationRequest {
     @Column(nullable = false)
     private String prescriptionLink;
 
-    @Column(nullable = false)
+    @Column(nullable = false,name = "status")
     @Enumerated(EnumType.STRING)
-    private StatusEnum Status = StatusEnum.PENDING;
+    private StatusEnum status = StatusEnum.PENDING;
 
     private Long AdminId;
 
