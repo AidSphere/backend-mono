@@ -19,9 +19,9 @@ public class DonationRespondDTO {
 
     private String hospitalName;
 
-    private String massageToPatient;
+    private String messageToPatient;
 
-    public DonationRespondDTO(Long patientId, Date createdAt, String prescriptionLink, String hospitalName, String massageToPatient) {
+    public DonationRespondDTO(Long patientId, Date createdAt, String prescriptionLink, String hospitalName, String messageToPatient) {
         this.patientId = patientId;
         this.createdAt = createdAt;
         this.prescriptionLink = prescriptionLink;
