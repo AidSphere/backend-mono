@@ -1,9 +1,9 @@
 package org.spring.authenticationservice.controller;
 
 import io.jsonwebtoken.Claims;
-import org.spring.authenticationservice.DTO.security.LoginUserDto;
-import org.spring.authenticationservice.DTO.security.RegisterUserDto;
-import org.spring.authenticationservice.Service.security.AuthService;
+import org.spring.authenticationservice.dto.LoginUserDto;
+import org.spring.authenticationservice.dto.RegisterUserDto;
+import org.spring.authenticationservice.service.AuthService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

@@ -1,4 +1,4 @@
-package org.spring.authenticationservice.Service;
+package org.spring.authenticationservice.service;
 
 import io.jsonwebtoken.Claims;
 import org.junit.jupiter.api.BeforeEach;
@@ -8,13 +8,10 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.spring.authenticationservice.DTO.security.LoginUserDto;
-import org.spring.authenticationservice.Service.security.AuthService;
-import org.spring.authenticationservice.Service.security.EmailService;
-import org.spring.authenticationservice.Service.security.JwtService;
-import org.spring.authenticationservice.model.security.User;
-import org.spring.authenticationservice.repository.security.RoleRepository;
-import org.spring.authenticationservice.repository.security.UserRepository;
+import org.spring.authenticationservice.dto.LoginUserDto;
+import org.spring.authenticationservice.model.User;
+import org.spring.authenticationservice.repository.RoleRepository;
+import org.spring.authenticationservice.repository.UserRepository;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
