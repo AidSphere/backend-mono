@@ -1,12 +1,16 @@
 package org.spring.authenticationservice.model.security;
 
 import jakarta.persistence.*;
+import lombok.Getter;
+import lombok.Setter;
 
 import java.util.ArrayList;
 import java.util.List;
 
 
 @Entity
+@Getter
+@Setter
 @Table(name = "users")
 public class User {
 
@@ -31,8 +35,28 @@ public class User {
     )
     private List<Role> roles = new ArrayList<>();
 
-    public void setRoles(List<Role> roles) {
-        this.roles = roles;
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
     }
 
     public boolean isEnabled() {
@@ -47,40 +71,7 @@ public class User {
         return roles;
     }
 
-    public Long getId() {
-        return id;
+    public void setRoles(List<Role> roles) {
+        this.roles = roles;
     }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    // Default constructor
-    public User() {
-
-    }
-
-
-    public String getPassword() {
-        return password;
-    }
-
-    public String getEmail() {
-        return email;
-    }
-
-    public boolean getIsEnabled() {
-        return isEnabled;
-    }
-
-
-    public void setPassword(String password){
-        this.password = password;
-    }
-    public void setEmail(String email) {
-        this.email = email;
-    }
-
-
-
 }

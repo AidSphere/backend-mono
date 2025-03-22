@@ -11,7 +11,7 @@ import java.time.LocalDate;
 @Data
 @Entity
 @Table(name = "quotations")
-public class DrugImpoQuoteRequest {
+public class quotations {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

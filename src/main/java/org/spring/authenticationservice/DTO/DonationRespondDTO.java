@@ -26,7 +26,7 @@ public class DonationRespondDTO {
         this.createdAt = createdAt;
         this.prescriptionLink = prescriptionLink;
         this.hospitalName = hospitalName;
-        this.massageToPatient = massageToPatient;
+
     }
 
 
