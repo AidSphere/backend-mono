@@ -14,41 +14,41 @@ public class Donor {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @JsonProperty("fullName")
+    @JsonProperty("firstName")
     @Column(nullable = false)
-    private String fullName;
+    private String firstName;
 
-    @JsonProperty("dateOfBirth")
+
+    @JsonProperty("lastName")
     @Column(nullable = false)
-    private LocalDate dateOfBirth;
+    private String lastName;
+
+
+    @JsonProperty("email")
+    @Column(nullable = false, unique = true)
+    private String email;
+
+
+    @JsonProperty("NIC")
+    @Column(nullable = false, unique = true)
+    private String NIC;
+
+
+    @JsonProperty("phoneNumber")
+    @Column(nullable = false, unique = true)
+    private String phoneNumber;
+
 
     @Column(nullable = false)
     @JsonProperty("address")
     private String address;
 
-    @JsonProperty("phoneNumber")
-    @Column(nullable = false,unique = true)
-    private String phoneNumber;
-
-    @JsonProperty("email")
-    @Column(nullable = false,unique = true)
-    private String email;
 
     @JsonProperty("description")
-    @Column(nullable = true)
     private String description;
 
-    public String getProfileUrl() {
-        return profileUrl;
-    }
 
-    public void setProfileUrl(String profileUrl) {
-        this.profileUrl = profileUrl;
-    }
 
-    @JsonProperty("profileUrl")
-    @Column(nullable = true)
-    private String profileUrl;
 
     public Long getId() {
         return id;
@@ -58,36 +58,20 @@ public class Donor {
         this.id = id;
     }
 
-    public String getFullName() {
-        return fullName;
+    public String getFirstName() {
+        return firstName;
     }
 
-    public void setFullName(String fullName) {
-        this.fullName = fullName;
+    public void setFirstName(String firstName) {
+        this.firstName = firstName;
     }
 
-    public LocalDate getDateOfBirth() {
-        return dateOfBirth;
+    public String getLastName() {
+        return lastName;
     }
 
-    public void setDateOfBirth(LocalDate dateOfBirth) {
-        this.dateOfBirth = dateOfBirth;
-    }
-
-    public String getAddress() {
-        return address;
-    }
-
-    public void setAddress(String address) {
-        this.address = address;
-    }
-
-    public String getPhoneNumber() {
-        return phoneNumber;
-    }
-
-    public void setPhoneNumber(String phoneNumber) {
-        this.phoneNumber = phoneNumber;
+    public void setLastName(String lastName) {
+        this.lastName = lastName;
     }
 
     public String getEmail() {
@@ -98,6 +82,30 @@ public class Donor {
         this.email = email;
     }
 
+    public String getNIC() {
+        return NIC;
+    }
+
+    public void setNIC(String NIC) {
+        this.NIC = NIC;
+    }
+
+    public String getPhoneNumber() {
+        return phoneNumber;
+    }
+
+    public void setPhoneNumber(String phoneNumber) {
+        this.phoneNumber = phoneNumber;
+    }
+
+    public String getAddress() {
+        return address;
+    }
+
+    public void setAddress(String address) {
+        this.address = address;
+    }
+
     public String getDescription() {
         return description;
     }
@@ -106,3 +114,10 @@ public class Donor {
         this.description = description;
     }
 }
+
+
+
+
+
+
+
