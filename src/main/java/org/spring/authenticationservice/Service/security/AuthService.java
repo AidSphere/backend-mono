@@ -48,13 +48,12 @@ public class AuthService {
         User user = new User();
         user.setEmail(registerUserDto.getEmail());
         user.setPassword(encoder.encode(registerUserDto.getPassword()));
-        // Assign default role USER
-        Role userRole = roleRepository.findByName("USER")
-                .orElseThrow(() -> new RuntimeException("Role USER not found"));
+        Role userRole = roleRepository.findByName(registerUserDto.getRole());
+
         user.getRoles().add(userRole);
 
         if (findUserByUsername(user.getEmail())) {
-            throw new Exception("User already exists");
+            throw new Exception(user.getEmail()+" already exists");
         }
 
         String activationToken = jwtService.generateActivationToken(user.getEmail());
@@ -124,7 +123,7 @@ public class AuthService {
             );
 
             try{
-                String mailResponse = emailService.sendEmail("resetPassword",emailBody);
+                String mailResponse = emailService.sendEmail("reset",emailBody);
                 System.out.println(mailResponse);
             }
             catch (Exception e) {
