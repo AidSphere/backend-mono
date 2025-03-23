@@ -21,12 +21,11 @@ public class DonationRespondDTO {
 
     private String messageToPatient;
 
-    public DonationRespondDTO(Long patientId, Date createdAt, String prescriptionLink, String hospitalName, String messageToPatient) {
+    public DonationRespondDTO(Long patientId, Date createdAt, String prescriptionLink, String hospitalName) {
         this.patientId = patientId;
         this.createdAt = createdAt;
         this.prescriptionLink = prescriptionLink;
         this.hospitalName = hospitalName;
-        this.massageToPatient = massageToPatient;
     }
 
 
