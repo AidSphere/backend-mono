@@ -9,7 +9,7 @@ public class Role {
     private Long id;
 
     @Column(unique = true, nullable = false)
-    private String name; // Example: "ADMIN", "USER"
+    private String name;
 
     public Long getId() {
         return id;
