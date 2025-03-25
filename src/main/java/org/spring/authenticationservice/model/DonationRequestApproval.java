@@ -2,15 +2,15 @@ package org.spring.authenticationservice.model;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.*;
-import lombok.Data;
 import org.spring.authenticationservice.model.Enum.StatusEnum;
+import org.spring.authenticationservice.model.patient.DonationRequest;
 import org.springframework.data.annotation.CreatedDate;
 
 import java.time.LocalDateTime;
 import java.util.Date;
 
 @Entity
-public class DonationPatientRequests {
+public class DonationRequestApproval {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -44,6 +44,12 @@ public class DonationPatientRequests {
 
     @JsonProperty("adminApprovedDate")
     private LocalDateTime adminApprovedDate;
+
+// newly added
+    @OneToOne
+    @JoinColumn(name = "request_id", nullable = false)
+    private DonationRequest donationRequest;
+
 
     public StatusEnum getStatus() {
         return status;

@@ -1,7 +1,7 @@
 package org.spring.authenticationservice.controller;
 import org.spring.authenticationservice.DTO.DonationRequestConfirmationDTO;
 import org.spring.authenticationservice.Service.DonationRequestService;
-import org.spring.authenticationservice.model.DonationPatientRequests;
+import org.spring.authenticationservice.model.DonationRequestApproval;
 import org.springframework.data.crossstore.ChangeSetPersister;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -20,12 +20,12 @@ public class DonationRequestController {
     }
 
     @PostMapping("/create")
-    public DonationPatientRequests createDonation(@RequestBody DonationPatientRequests donationPatientRequests) {
-        return donationRequestService.createDonationRequest(donationPatientRequests);
+    public DonationRequestApproval createDonation(@RequestBody DonationRequestApproval donationRequestApproval) {
+        return donationRequestService.createDonationRequest(donationRequestApproval);
     }
 
     @GetMapping("/pending")
-    public List<DonationPatientRequests> getPendingDonations() {
+    public List<DonationRequestApproval> getPendingDonations() {
         return donationRequestService.getPendingDonationRequests();
     }
 

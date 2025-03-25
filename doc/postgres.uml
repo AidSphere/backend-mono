@@ -1,0 +1,152 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Diagram>
+  <ID>DATABASE</ID>
+  <OriginalElement>3ea656c0-eb02-423e-b2b6-8217fb4f3e20.DATABASE:postgres</OriginalElement>
+  <nodes>
+    <node x="269.0" y="1946.5048281150162">3ea656c0-eb02-423e-b2b6-8217fb4f3e20.TABLE:postgres.public.donation_request</node>
+    <node x="110.5" y="-165.0">3ea656c0-eb02-423e-b2b6-8217fb4f3e20.TABLE:postgres.public.importer</node>
+    <node x="-112.0812779552715" y="2369.6240366347183">3ea656c0-eb02-423e-b2b6-8217fb4f3e20.TABLE:postgres.public.donation_request_documents</node>
+    <node x="508.9036123535676" y="1461.5">3ea656c0-eb02-423e-b2b6-8217fb4f3e20.TABLE:postgres.public.patient</node>
+    <node x="870.0112886048989" y="2012.6561864110759">3ea656c0-eb02-423e-b2b6-8217fb4f3e20.TABLE:postgres.public.medical_records</node>
+    <node x="85.03892616315238" y="2538.08043458999">3ea656c0-eb02-423e-b2b6-8217fb4f3e20.TABLE:postgres.public.donation_request_approval</node>
+    <node x="141.4036123535676" y="1724.1824937167198">3ea656c0-eb02-423e-b2b6-8217fb4f3e20.TABLE:postgres.public.patient_verification_documents</node>
+    <node x="-809.3054440894565" y="887.1303514377">3ea656c0-eb02-423e-b2b6-8217fb4f3e20.TABLE:postgres.public.verification_token</node>
+    <node x="876.6487923322684" y="62.59763833865827">3ea656c0-eb02-423e-b2b6-8217fb4f3e20.TABLE:postgres.public.donations</node>
+    <node x="934.6487923322684" y="386.59763833865827">3ea656c0-eb02-423e-b2b6-8217fb4f3e20.TABLE:postgres.public.donors</node>
+    <node x="-194.0" y="27.0">3ea656c0-eb02-423e-b2b6-8217fb4f3e20.TABLE:postgres.public.donation_requests</node>
+    <node x="-902.0088826411072" y="1147.5171527156556">3ea656c0-eb02-423e-b2b6-8217fb4f3e20.TABLE:postgres.public.users</node>
+    <node x="418.871378913738" y="2369.6240366347183">3ea656c0-eb02-423e-b2b6-8217fb4f3e20.TABLE:postgres.public.donation_request_images</node>
+    <node x="459.0" y="1091.0">3ea656c0-eb02-423e-b2b6-8217fb4f3e20.TABLE:postgres.public.patient_verifications</node>
+    <node x="-596.000477103301" y="1233.6303514377">3ea656c0-eb02-423e-b2b6-8217fb4f3e20.TABLE:postgres.public.user_roles</node>
+    <node x="1187.486202683706" y="2234.5934355697555">3ea656c0-eb02-423e-b2b6-8217fb4f3e20.TABLE:postgres.public.medical_documents</node>
+    <node x="1026.7177628966986" y="2523.3678014909483">3ea656c0-eb02-423e-b2b6-8217fb4f3e20.TABLE:postgres.public.medical_record_ongoing_treatments</node>
+    <node x="502.2643970181042" y="62.59763833865827">3ea656c0-eb02-423e-b2b6-8217fb4f3e20.TABLE:postgres.public.donation_patient_requests</node>
+    <node x="-202.98800971246007" y="2103.7603689030884">3ea656c0-eb02-423e-b2b6-8217fb4f3e20.TABLE:postgres.public.patient_prescribed_medicines</node>
+    <node x="-502.4227765708197" y="959.1303514377">3ea656c0-eb02-423e-b2b6-8217fb4f3e20.TABLE:postgres.public.role</node>
+    <node x="585.1965890521832" y="2601.1473082002135">3ea656c0-eb02-423e-b2b6-8217fb4f3e20.TABLE:postgres.public.medical_record_prescribed_medicines</node>
+    <node x="-110.0" y="459.7259467518638">3ea656c0-eb02-423e-b2b6-8217fb4f3e20.TABLE:postgres.public.quotations</node>
+  </nodes>
+  <notes />
+  <edges>
+    <edge source="3ea656c0-eb02-423e-b2b6-8217fb4f3e20.TABLE:postgres.public.quotations" target="3ea656c0-eb02-423e-b2b6-8217fb4f3e20.TABLE:postgres.public.donation_requests" relationship="REFERENCES">
+      <point x="-59.5" y="-141.0" />
+      <point x="-50.5" y="399.12052822151236" />
+      <point x="-51.0" y="399.12052822151236" />
+      <point x="0.0" y="129.0" />
+    </edge>
+    <edge source="3ea656c0-eb02-423e-b2b6-8217fb4f3e20.TABLE:postgres.public.patient_verification_documents" target="3ea656c0-eb02-423e-b2b6-8217fb4f3e20.TABLE:postgres.public.patient_verifications" relationship="REFERENCES">
+      <point x="0.0" y="-81.0" />
+      <point x="303.4036123535676" y="1336.0" />
+      <point x="534.0" y="1336.0" />
+      <point x="-75.0" y="105.0" />
+    </edge>
+    <edge source="3ea656c0-eb02-423e-b2b6-8217fb4f3e20.TABLE:postgres.public.patient_prescribed_medicines" target="3ea656c0-eb02-423e-b2b6-8217fb4f3e20.TABLE:postgres.public.donation_request" relationship="REFERENCES">
+      <point x="0.0" y="-56.5" />
+      <point x="-46.98800971246007" y="2263.5831539936103" />
+      <point x="389.0" y="2263.5831539936103" />
+      <point x="0.0" y="129.0" />
+    </edge>
+    <edge source="3ea656c0-eb02-423e-b2b6-8217fb4f3e20.TABLE:postgres.public.donation_request_documents" target="3ea656c0-eb02-423e-b2b6-8217fb4f3e20.TABLE:postgres.public.donation_request" relationship="REFERENCES">
+      <point x="0.0" y="-44.5" />
+      <point x="41.4187220447285" y="2263.5831539936103" />
+      <point x="389.0" y="2263.5831539936103" />
+      <point x="0.0" y="129.0" />
+    </edge>
+    <edge source="3ea656c0-eb02-423e-b2b6-8217fb4f3e20.TABLE:postgres.public.quotations" target="3ea656c0-eb02-423e-b2b6-8217fb4f3e20.TABLE:postgres.public.importer" relationship="REFERENCES">
+      <point x="59.5" y="-141.0" />
+      <point x="68.5" y="376.0" />
+      <point x="229.0" y="376.0" />
+      <point x="0.0" y="81.0" />
+    </edge>
+    <edge source="3ea656c0-eb02-423e-b2b6-8217fb4f3e20.TABLE:postgres.public.patient_verifications" target="3ea656c0-eb02-423e-b2b6-8217fb4f3e20.TABLE:postgres.public.patient" relationship="REFERENCES">
+      <point x="75.0" y="105.0" />
+      <point x="684.0" y="1376.0" />
+      <point x="710.6536123535676" y="1376.0" />
+      <point x="67.25" y="-153.0" />
+    </edge>
+    <edge source="3ea656c0-eb02-423e-b2b6-8217fb4f3e20.TABLE:postgres.public.patient" target="3ea656c0-eb02-423e-b2b6-8217fb4f3e20.TABLE:postgres.public.patient_verifications" relationship="REFERENCES">
+      <point x="-67.25" y="-153.0" />
+      <point x="576.1536123535676" y="1376.0" />
+      <point x="529.0" y="1376.0" />
+      <point x="529.0" y="1336.0" />
+      <point x="534.0" y="1336.0" />
+      <point x="-75.0" y="105.0" />
+    </edge>
+    <edge source="3ea656c0-eb02-423e-b2b6-8217fb4f3e20.TABLE:postgres.public.donation_request" target="3ea656c0-eb02-423e-b2b6-8217fb4f3e20.TABLE:postgres.public.patient" relationship="REFERENCES">
+      <point x="0.0" y="-129.0" />
+      <point x="389.0" y="1915.5048281150162" />
+      <point x="643.4036123535676" y="1915.5048281150162" />
+      <point x="0.0" y="153.0" />
+    </edge>
+    <edge source="3ea656c0-eb02-423e-b2b6-8217fb4f3e20.TABLE:postgres.public.medical_record_prescribed_medicines" target="3ea656c0-eb02-423e-b2b6-8217fb4f3e20.TABLE:postgres.public.medical_records" relationship="REFERENCES">
+      <point x="0.0" y="-44.5" />
+      <point x="779.1965890521832" y="2371.080507263046" />
+      <point x="932.0112886048989" y="2371.080507263046" />
+      <point x="-62.0" y="117.0" />
+    </edge>
+    <edge source="3ea656c0-eb02-423e-b2b6-8217fb4f3e20.TABLE:postgres.public.user_roles" target="3ea656c0-eb02-423e-b2b6-8217fb4f3e20.TABLE:postgres.public.users" relationship="REFERENCES">
+      <point x="-32.5" y="-44.5" />
+      <point x="-563.500477103301" y="1413.3063156549529" />
+      <point x="-804.0088826411072" y="1413.3063156549529" />
+      <point x="0.0" y="69.0" />
+    </edge>
+    <edge source="3ea656c0-eb02-423e-b2b6-8217fb4f3e20.TABLE:postgres.public.donation_request_images" target="3ea656c0-eb02-423e-b2b6-8217fb4f3e20.TABLE:postgres.public.donation_request" relationship="REFERENCES">
+      <point x="0.0" y="-44.5" />
+      <point x="554.371378913738" y="2297.016280383387" />
+      <point x="389.0" y="2297.016280383387" />
+      <point x="0.0" y="129.0" />
+    </edge>
+    <edge source="3ea656c0-eb02-423e-b2b6-8217fb4f3e20.TABLE:postgres.public.medical_records" target="3ea656c0-eb02-423e-b2b6-8217fb4f3e20.TABLE:postgres.public.patient" relationship="REFERENCES">
+      <point x="0.0" y="-117.0" />
+      <point x="994.0112886048989" y="1915.5048281150162" />
+      <point x="643.4036123535676" y="1915.5048281150162" />
+      <point x="0.0" y="153.0" />
+    </edge>
+    <edge source="3ea656c0-eb02-423e-b2b6-8217fb4f3e20.TABLE:postgres.public.medical_documents" target="3ea656c0-eb02-423e-b2b6-8217fb4f3e20.TABLE:postgres.public.medical_records" relationship="REFERENCES">
+      <point x="0.0" y="-80.5" />
+      <point x="1308.986202683706" y="2150.655241064962" />
+      <point x="1112.0586249951011" y="2150.655241064962" />
+      <point x="1112.0586249951011" y="2229.137575633653" />
+      <point x="1056.011288604899" y="2229.137575633653" />
+      <point x="62.0" y="117.0" />
+    </edge>
+    <edge source="3ea656c0-eb02-423e-b2b6-8217fb4f3e20.TABLE:postgres.public.donation_patient_requests" target="3ea656c0-eb02-423e-b2b6-8217fb4f3e20.TABLE:postgres.public.importer" relationship="REFERENCES">
+      <point x="0.0" y="-165.0" />
+      <point x="645.2643970181042" y="128.29881916932914" />
+      <point x="427.76985047923324" y="128.29881916932914" />
+      <point x="427.76985047923324" y="179.5963876464324" />
+      <point x="229.0" y="179.5963876464324" />
+      <point x="0.0" y="81.0" />
+    </edge>
+    <edge source="3ea656c0-eb02-423e-b2b6-8217fb4f3e20.TABLE:postgres.public.user_roles" target="3ea656c0-eb02-423e-b2b6-8217fb4f3e20.TABLE:postgres.public.role" relationship="REFERENCES">
+      <point x="32.5" y="-44.5" />
+      <point x="-498.500477103301" y="1141.3803514377" />
+      <point x="-420.4227765708197" y="1141.3803514377" />
+      <point x="0.0" y="45.0" />
+    </edge>
+    <edge source="3ea656c0-eb02-423e-b2b6-8217fb4f3e20.TABLE:postgres.public.donation_request_approval" target="3ea656c0-eb02-423e-b2b6-8217fb4f3e20.TABLE:postgres.public.donation_request" relationship="REFERENCES">
+      <point x="0.0" y="-141.0" />
+      <point x="228.03892616315238" y="2482.516280383387" />
+      <point x="389.0" y="2482.516280383387" />
+      <point x="0.0" y="129.0" />
+    </edge>
+    <edge source="3ea656c0-eb02-423e-b2b6-8217fb4f3e20.TABLE:postgres.public.medical_record_ongoing_treatments" target="3ea656c0-eb02-423e-b2b6-8217fb4f3e20.TABLE:postgres.public.medical_records" relationship="REFERENCES">
+      <point x="0.0" y="-44.5" />
+      <point x="1211.2177628966986" y="2468.7459190628333" />
+      <point x="932.0112886048989" y="2468.7459190628333" />
+      <point x="-62.0" y="117.0" />
+    </edge>
+  </edges>
+  <settings layout="Hierarchic Compact" zoom="0.5554162250151429" showDependencies="false" x="502.2095335463248" y="623.7124239403616" />
+  <SelectedNodes>
+    <node>3ea656c0-eb02-423e-b2b6-8217fb4f3e20.TABLE:postgres.public.donors</node>
+    <node>3ea656c0-eb02-423e-b2b6-8217fb4f3e20.TABLE:postgres.public.donations</node>
+  </SelectedNodes>
+  <Categories>
+    <Category>Columns</Category>
+    <Category>Comments</Category>
+    <Category>Key columns</Category>
+    <Category>Virtual foreign keys</Category>
+  </Categories>
+</Diagram>
+
