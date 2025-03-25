@@ -18,7 +18,7 @@ public class PatientVerificationDocument {
     private PatientVerification patientVerification;
 
     private String documentName;
-    private String documentUrl;  // URL to the uploaded document
+    private String documentUrl;
     private OffsetDateTime uploadedAt = OffsetDateTime.now();
 }
 

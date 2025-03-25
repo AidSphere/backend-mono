@@ -43,11 +43,6 @@ public class MedicalRecord {
     @CollectionTable(name = "medical_documents", joinColumns = @JoinColumn(name = "record_id"))
     private List<MedicalDocument> medicalDocuments;
 
-    @ElementCollection
-    private List<String> prescribedMedicines; // List of medicine names
-
-    @ElementCollection
-    private List<String> ongoingTreatments; // List of treatments
 }
 
 @Embeddable
