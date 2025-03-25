@@ -10,6 +10,7 @@ import java.time.LocalDateTime;
 import java.util.Date;
 
 @Entity
+@Table(name = "donation_request_approval")
 public class DonationRequestApproval {
 
     @Id
