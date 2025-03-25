@@ -8,6 +8,8 @@ import org.spring.authenticationservice.model.DonationRequestApproval;
 import org.spring.authenticationservice.model.Enum.StatusEnum;
 import org.springframework.data.annotation.CreatedDate;
 
+import java.math.BigDecimal;
+import java.time.LocalDateTime;
 import java.util.Date;
 import java.util.List;
 
@@ -40,13 +42,26 @@ public class DonationRequest {
 
     @CreatedDate
     @Column(name = "created_at")
-    private Date createdAt;
+    @Temporal(TemporalType.TIMESTAMP)
+    private LocalDateTime createdAt;
 
     @Column(name = "expected_date")
     private Date expectedDate;
 
     @Column(name = "hospital_name")
     private String hospitalName;
+
+    @Column(name = "message_to_patient")
+    private String messageToPatient;
+
+    @Column(name = "admin_id")
+    private Long adminId;
+
+    @Column(name = "admin_approved_date")
+    private LocalDateTime adminApprovedAt;
+
+    @Column(name="default_price")
+    private BigDecimal defaultPrice;  // Default price for the prescribed items
 
     @ElementCollection
     @CollectionTable(name = "donation_request_images", joinColumns = @JoinColumn(name = "request_id"))
@@ -68,9 +83,9 @@ public class DonationRequest {
 
 @Embeddable
 @Data
-@NoArgsConstructor // Required for JPA
+@NoArgsConstructor
 @AllArgsConstructor
 class PrescribedMedicine {
     private String medicine;
-    private String amount; // e.g., "500mg"
+    private int amount;
 }
