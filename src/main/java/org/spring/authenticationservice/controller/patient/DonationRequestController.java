@@ -3,6 +3,7 @@ package org.spring.authenticationservice.controller.patient;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.spring.authenticationservice.DTO.api.ApiResponse;
+import org.spring.authenticationservice.DTO.patient.donation.DonationRequestConfirmDto;
 import org.spring.authenticationservice.DTO.patient.donation.DonationRequestCreateDto;
 import org.spring.authenticationservice.DTO.patient.donation.DonationRequestResponseDto;
 import org.spring.authenticationservice.DTO.patient.donation.DonationRequestUpdateDto;
@@ -12,6 +13,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @RestController
 @RequestMapping("/donation-requests")
@@ -34,7 +36,18 @@ public class DonationRequestController {
 
 
 
+    @PutMapping("/update/{requestId}")
+    public ResponseEntity<ApiResponse<?>> updateDonationRequest(
+            @PathVariable Long requestId,
+            @Valid @RequestBody DonationRequestUpdateDto dto) {
+        DonationRequestResponseDto responseDto = donationRequestService.updateDonationRequest(requestId, dto);
 
-
+        return ResponseEntity.ok(ApiResponse.builder()
+                .timestamp(LocalDateTime.now())
+                .status(HttpStatus.OK.value())
+                .message("Donation Request Updated Successfully")
+                .data(responseDto)
+                .build());
+    }
 
 }
