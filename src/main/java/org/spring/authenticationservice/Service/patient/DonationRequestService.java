@@ -66,7 +66,14 @@ public class DonationRequestService {
     }
 
 
-
+    @Transactional(readOnly = true)
+    public List<DonationRequestResponseDto> getPendingDonationRequests() {
+        List<DonationRequest> pendingRequests = donationRequestRepository
+                .findByStatus(StatusEnum.PENDING);
+        return pendingRequests.stream()
+                .map(mapper::toResponseDto)
+                .collect(Collectors.toList());
+    }
 
     @Transactional
     public DonationRequestResponseDto updateConfirmation(

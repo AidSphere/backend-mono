@@ -62,9 +62,20 @@ public class DonationRequestController {
     }
 
 
+    @GetMapping("/pending")
+    public ResponseEntity<ApiResponse<?>> getPendingDonations() {
+        List<DonationRequestResponseDto> pendingRequests =
+                donationRequestService.getPendingDonationRequests();
 
+        return ResponseEntity.ok(ApiResponse.builder()
+                .timestamp(LocalDateTime.now())
+                .status(HttpStatus.OK.value())
+                .message("Pending Donation Requests Retrieved Successfully")
+                .data(pendingRequests)
+                .build());
+    }
 
-    @PutMapping("/{requestId}/respond")
+    @PutMapping("/{requestId}/approve")
     public ResponseEntity<ApiResponse<?>> confirmDonationRequest(
             @PathVariable Long requestId,
             @Valid @RequestBody DonationRequestConfirmDto dto) {
