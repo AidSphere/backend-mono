@@ -50,4 +50,16 @@ public class DonationRequestController {
                 .build());
     }
 
+    @DeleteMapping("/delete/{requestId}")
+    public ResponseEntity<ApiResponse<?>> deleteDonationRequest(@PathVariable Long requestId) {
+        donationRequestService.deleteDonationRequest(requestId);
+
+        return ResponseEntity.ok(ApiResponse.builder()
+                .timestamp(LocalDateTime.now())
+                .status(HttpStatus.OK.value())
+                .message("Donation Request Deleted Successfully")
+                .build());
+    }
+
+
 }

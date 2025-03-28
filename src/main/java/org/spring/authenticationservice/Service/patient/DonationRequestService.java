@@ -56,5 +56,14 @@ public class DonationRequestService {
     }
 
 
+    @Transactional
+    public void deleteDonationRequest(Long requestId) {
+        DonationRequest existingRequest = donationRequestRepository.findById(requestId)
+                .orElseThrow(() -> new RuntimeException("Donation request not found"));
+
+        // logic to be added (e.g., checking ownership)
+        donationRequestRepository.delete(existingRequest);
+    }
+
 
 }
