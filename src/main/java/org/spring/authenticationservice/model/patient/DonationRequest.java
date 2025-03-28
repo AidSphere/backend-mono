@@ -1,10 +1,7 @@
 package org.spring.authenticationservice.model.patient;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
 import lombok.Data;
-import lombok.NoArgsConstructor;
-import org.spring.authenticationservice.model.DonationRequestApproval;
 import org.spring.authenticationservice.model.Enum.StatusEnum;
 import org.springframework.data.annotation.CreatedDate;
 
@@ -77,15 +74,5 @@ public class DonationRequest {
     @CollectionTable(name = "patient_prescribed_medicines", joinColumns = @JoinColumn(name = "request_id"))
     private List<PrescribedMedicine> prescribedMedicines;
 
-    @OneToOne(mappedBy = "donationRequest", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    private DonationRequestApproval approval;
 }
 
-@Embeddable
-@Data
-@NoArgsConstructor
-@AllArgsConstructor
-class PrescribedMedicine {
-    private String medicine;
-    private int amount;
-}
