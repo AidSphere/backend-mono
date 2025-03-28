@@ -1,5 +1,6 @@
 package org.spring.authenticationservice.model.patient;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 import lombok.Data;
 import org.spring.authenticationservice.model.Enum.PatientIDType;
@@ -19,6 +20,7 @@ public class PatientVerification {
 
     @OneToOne
     @JoinColumn(name = "patient_id", nullable = false)
+    @JsonBackReference
     private Patient patient;
 
     @Column(name = "verification_status")
