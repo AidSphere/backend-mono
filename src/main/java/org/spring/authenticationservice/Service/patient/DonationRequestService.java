@@ -66,4 +66,24 @@ public class DonationRequestService {
     }
 
 
+
+
+    @Transactional
+    public DonationRequestResponseDto updateConfirmation(
+            Long requestId,
+            StatusEnum status,
+            String messageToPatient) {
+        DonationRequest request = donationRequestRepository.findById(requestId)
+                .orElseThrow(() -> new RuntimeException("Donation request not found"));
+
+        request.setStatus(status);
+        request.setMessageToPatient(messageToPatient);
+        request.setAdminApprovedAt(LocalDateTime.now());
+        // TODO: Set adminId from security context
+//        request.setAdminId(SecurityContextHolder.getContext().getAuthentication().getName());
+
+        DonationRequest savedRequest = donationRequestRepository.save(request);
+        return mapper.toResponseDto(savedRequest);
+    }
+
 }

@@ -62,4 +62,21 @@ public class DonationRequestController {
     }
 
 
+
+
+    @PutMapping("/{requestId}/respond")
+    public ResponseEntity<ApiResponse<?>> confirmDonationRequest(
+            @PathVariable Long requestId,
+            @Valid @RequestBody DonationRequestConfirmDto dto) {
+        DonationRequestResponseDto responseDto = donationRequestService
+                .updateConfirmation(requestId, dto.getStatus(), dto.getMessageToPatient());
+
+        return ResponseEntity.ok(ApiResponse.builder()
+                .timestamp(LocalDateTime.now())
+                .status(HttpStatus.OK.value())
+                .message("Donation Request Status Updated Successfully")
+                .data(responseDto)
+                .build());
+    }
+
 }
