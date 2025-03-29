@@ -7,6 +7,7 @@ import org.spring.authenticationservice.model.Enum.PatientIDType;
 
 import java.util.Date;
 
+// DTO class to represent the patient creation request
 @Data
 public class PatientCreateDto {
     @Size(min = 2, max = 50, message = "First name must be between 2 and 50 characters")

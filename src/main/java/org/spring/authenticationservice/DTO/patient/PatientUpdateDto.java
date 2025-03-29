@@ -9,6 +9,7 @@ import org.hibernate.validator.constraints.URL;
 
 import java.util.Date;
 
+// DTO class for updating patient information
 @Data
 public class PatientUpdateDto {
     @Size(min = 2, max = 50, message = "Last name must be between 2 and 50 characters")

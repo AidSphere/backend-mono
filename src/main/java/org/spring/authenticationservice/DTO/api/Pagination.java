@@ -5,6 +5,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+// Pagination class to represent the pagination information in the API response
 @Data
 @Builder
 @NoArgsConstructor

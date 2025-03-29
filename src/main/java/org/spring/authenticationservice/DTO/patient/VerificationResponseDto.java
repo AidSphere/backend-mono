@@ -5,6 +5,7 @@ import lombok.Data;
 import org.spring.authenticationservice.model.Enum.PatientIDType;
 import org.spring.authenticationservice.model.Enum.StatusEnum;
 
+// Data transfer object for the verification response
 @Data
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class VerificationResponseDto {

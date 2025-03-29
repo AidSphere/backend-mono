@@ -13,6 +13,8 @@ import java.time.LocalDateTime;
 import java.util.Date;
 import java.util.List;
 
+// Data Transfer Object for Donation Request as Response
+
 @Data
 @Builder
 @NoArgsConstructor
