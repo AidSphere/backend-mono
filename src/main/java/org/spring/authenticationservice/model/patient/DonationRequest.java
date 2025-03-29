@@ -3,7 +3,6 @@ package org.spring.authenticationservice.model.patient;
 import jakarta.persistence.*;
 import lombok.Data;
 import org.spring.authenticationservice.model.Enum.StatusEnum;
-import org.springframework.data.annotation.CreatedDate;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
@@ -37,9 +36,7 @@ public class DonationRequest {
     @Enumerated(EnumType.STRING)
     private StatusEnum status = StatusEnum.PENDING;
 
-    @CreatedDate
-    @Column(name = "created_at")
-    @Temporal(TemporalType.TIMESTAMP)
+    @Column(name = "created_at", nullable = false, updatable = false)
     private LocalDateTime createdAt;
 
     @Column(name = "expected_date")
@@ -74,5 +71,9 @@ public class DonationRequest {
     @CollectionTable(name = "patient_prescribed_medicines", joinColumns = @JoinColumn(name = "request_id"))
     private List<PrescribedMedicine> prescribedMedicines;
 
+    @PrePersist
+    protected void onCreate() {
+        createdAt = LocalDateTime.now();
+    }
 }
 
