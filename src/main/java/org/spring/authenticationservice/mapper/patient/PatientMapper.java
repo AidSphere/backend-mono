@@ -2,8 +2,10 @@ package org.spring.authenticationservice.mapper.patient;
 
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
+import org.mapstruct.MappingTarget;
 import org.spring.authenticationservice.DTO.patient.PatientCreateDto;
 import org.spring.authenticationservice.DTO.patient.PatientResponseDto;
+import org.spring.authenticationservice.DTO.patient.PatientUpdateDto;
 import org.spring.authenticationservice.model.patient.Patient;
 import org.spring.authenticationservice.model.patient.PatientVerification;
 
@@ -14,7 +16,15 @@ public interface PatientMapper {
     @Mapping(target = "verification", ignore = true)
     @Mapping(target = "medicalRecord", ignore = true)
     @Mapping(target = "donationRequests", ignore = true)
+    @Mapping(target = "dateOfBirth", source = "dateOfBirth", dateFormat = "yyyy-MM-dd")
     Patient toPatient(PatientCreateDto dto);
+
+    @Mapping(target = "verification", ignore = true)
+    @Mapping(target = "patientId", ignore = true)
+    @Mapping(target = "medicalRecord", ignore = true)
+    @Mapping(target = "donationRequests", ignore = true)
+    @Mapping(target = "dateOfBirth", source = "dateOfBirth", dateFormat = "yyyy-MM-dd")
+    Patient toPatient(PatientUpdateDto dto, @MappingTarget Patient existingPatient);
 
     @Mapping(target = "verificationId", ignore = true)
     @Mapping(target = "patient", ignore = true)
@@ -27,6 +37,7 @@ public interface PatientMapper {
     PatientVerification toPatientVerification(PatientCreateDto dto);
 
     @Mapping(target = "verification", source = "verification")
+    @Mapping(target = "dateOfBirth", source = "dateOfBirth", dateFormat = "yyyy-MM-dd")
     PatientResponseDto toResponseDto(Patient patient);
 
 }

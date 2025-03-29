@@ -8,6 +8,8 @@ import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
 
+//The `ApiResponse` class is a generic data transfer object (DTO) used to standardize the structure of API responses
+// in a Spring Boot application. It includes fields for timestamp, status, data, message, error, path, and pagination information.
 @Data
 @Builder
 @NoArgsConstructor
