@@ -5,7 +5,7 @@ import jakarta.persistence.*;
 import lombok.Data;
 import org.hibernate.validator.constraints.URL;
 
-import java.util.Date;
+import java.time.LocalDate;
 import java.util.List;
 
 @Entity
@@ -24,7 +24,7 @@ public class Patient {
     private String lastName;
 
     @Column(name = "dob", nullable = false)
-    private Date dateOfBirth;
+    private LocalDate dateOfBirth;
 
     @Column(name = "gender")
     private String gender;
@@ -53,7 +53,7 @@ public class Patient {
     @OneToOne(mappedBy = "patient", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private MedicalRecord medicalRecord;
 
-    @OneToMany(mappedBy = "patient", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "patient", cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true)
     private List<DonationRequest> donationRequests;
 
 }

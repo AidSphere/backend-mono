@@ -8,7 +8,7 @@ import lombok.NoArgsConstructor;
 import org.hibernate.validator.constraints.URL;
 import org.spring.authenticationservice.model.patient.PrescribedMedicine;
 
-import java.util.Date;
+import java.time.LocalDate;
 import java.util.List;
 
 @Data
@@ -31,7 +31,7 @@ public class DonationRequestUpdateDto {
 
     @NotNull(message = "Expected date is required")
     @Future(message = "Expected date must be in the future")
-    private Date expectedDate;
+    private LocalDate expectedDate;
 
     @NotBlank(message = "Hospital name is required")
     @Size(min = 2, max = 100, message = "Hospital name must be between 2 and 100 characters")

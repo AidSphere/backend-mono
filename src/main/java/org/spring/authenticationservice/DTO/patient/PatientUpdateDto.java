@@ -7,7 +7,7 @@ import jakarta.validation.constraints.Size;
 import lombok.Data;
 import org.hibernate.validator.constraints.URL;
 
-import java.util.Date;
+import java.time.LocalDate;
 
 // DTO class for updating patient information
 @Data
@@ -18,7 +18,7 @@ public class PatientUpdateDto {
     private String lastName;
 
     @Past(message = "Date of birth must be in the past")
-    private Date dateOfBirth;
+    private LocalDate dateOfBirth;
 
     @Pattern(regexp = "^(MALE|FEMALE|OTHER)$", message = "Gender must be MALE, FEMALE, or OTHER")
     private String gender;

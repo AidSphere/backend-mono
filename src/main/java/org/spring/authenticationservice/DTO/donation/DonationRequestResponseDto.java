@@ -9,8 +9,8 @@ import org.spring.authenticationservice.model.Enum.StatusEnum;
 import org.spring.authenticationservice.model.patient.PrescribedMedicine;
 
 import java.math.BigDecimal;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.util.Date;
 import java.util.List;
 
 // Data Transfer Object for Donation Request as Response
@@ -28,7 +28,7 @@ public class DonationRequestResponseDto {
     private String prescriptionUrl;
     private StatusEnum status;
     private LocalDateTime createdAt;
-    private Date expectedDate;
+    private LocalDate expectedDate;
     private String hospitalName;
     private String messageToPatient;
     private Long adminId;

@@ -18,7 +18,7 @@ public class PatientVerification {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long verificationId;
 
-    @OneToOne
+    @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "patient_id", nullable = false)
     @JsonBackReference
     private Patient patient;
@@ -40,7 +40,7 @@ public class PatientVerification {
     @Column(name = "document_url")
     private String governmentIdDocumentUrl; // URL to uploaded NIC or Birth Certificate
 
-    @OneToMany(mappedBy = "patientVerification", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "patientVerification", cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true)
     private List<PatientVerificationDocument> documents; // Multiple documents
 
     @PrePersist

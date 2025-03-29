@@ -5,7 +5,7 @@ import lombok.Data;
 import org.hibernate.validator.constraints.URL;
 import org.spring.authenticationservice.model.Enum.PatientIDType;
 
-import java.util.Date;
+import java.time.LocalDate;
 
 // DTO class to represent the patient creation request
 @Data
@@ -19,7 +19,7 @@ public class PatientCreateDto {
 
     @NotNull(message = "Date of birth is required")
     @Past(message = "Date of birth must be in the past")
-    private Date dateOfBirth;
+    private LocalDate dateOfBirth;
 
     @Pattern(regexp = "^(MALE|FEMALE|OTHER)$", message = "Gender must be MALE, FEMALE, or OTHER")
     private String gender;
