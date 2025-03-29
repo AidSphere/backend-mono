@@ -6,7 +6,7 @@ import lombok.Data;
 import org.spring.authenticationservice.model.Enum.PatientIDType;
 import org.spring.authenticationservice.model.Enum.StatusEnum;
 
-import java.time.OffsetDateTime;
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Entity
@@ -28,7 +28,7 @@ public class PatientVerification {
     private StatusEnum verificationStatus = StatusEnum.PENDING; // PENDING, APPROVED, REJECTED
 
     @Column(name = "verified_at")
-    private OffsetDateTime verifiedAt;
+    private LocalDateTime verifiedAt;
 
     @Column(name = "government_id_type")
     @Enumerated(EnumType.STRING)
@@ -42,4 +42,9 @@ public class PatientVerification {
 
     @OneToMany(mappedBy = "patientVerification", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<PatientVerificationDocument> documents; // Multiple documents
+
+    @PrePersist
+    protected void onCreate() {
+        verifiedAt = LocalDateTime.now();
+    }
 }
