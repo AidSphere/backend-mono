@@ -20,10 +20,12 @@ public interface DonationRequestMapper {
     @Mapping(target = "createdAt", ignore = true)
     @Mapping(target = "adminId", ignore = true)
     @Mapping(target = "adminApprovedAt", ignore = true)
+    @Mapping(target = "expectedDate", source = "expectedDate" , dateFormat = "yyyy-MM-dd")
     DonationRequest FromCreatetoDonationRequest(DonationRequestCreateDto dto);
 
     @InheritConfiguration
     @Mapping(source = "patient.patientId", target = "patientId") // Extract only patientId
+    @Mapping(target = "expectedDate", source = "expectedDate" , dateFormat = "yyyy-MM-dd")
     DonationRequestResponseDto toResponseDto(DonationRequest donationRequest);
 
     @Mapping(target = "status", ignore = true)
@@ -34,5 +36,6 @@ public interface DonationRequestMapper {
     @Mapping(target = "createdAt", ignore = true)
     @Mapping(target = "adminId", ignore = true)
     @Mapping(target = "adminApprovedAt", ignore = true)
+    @Mapping(target = "expectedDate", source = "expectedDate" , dateFormat = "yyyy-MM-dd")
     DonationRequest updateDonationRequestFromDto(DonationRequestUpdateDto donationRequestUpdateDto, @MappingTarget DonationRequest existingRequest);
 }

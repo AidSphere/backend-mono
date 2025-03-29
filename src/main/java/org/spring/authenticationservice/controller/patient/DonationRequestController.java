@@ -50,7 +50,7 @@ public class DonationRequestController {
                 .build());
     }
 
-    @DeleteMapping("/delete/{requestId}")
+    @DeleteMapping("/{requestId}")
     public ResponseEntity<ApiResponse<?>> deleteDonationRequest(@PathVariable Long requestId) {
         donationRequestService.deleteDonationRequest(requestId);
 
