@@ -5,14 +5,13 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.spring.authenticationservice.DTO.api.ApiResponse;
 import org.spring.authenticationservice.DTO.patient.PatientCreateDto;
+import org.spring.authenticationservice.DTO.patient.PatientResponseDto;
+import org.spring.authenticationservice.DTO.patient.PatientUpdateDto;
 import org.spring.authenticationservice.Service.patient.PatientService;
 import org.spring.authenticationservice.mapper.patient.PatientMapper;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDateTime;
 
@@ -37,4 +36,31 @@ public class PatientController {
                         .data(responseDto)
                         .build());
     }
+
+    @PutMapping("/{id}")
+    public ResponseEntity<ApiResponse<?>> updatePatient(
+            @PathVariable Long id,
+            @Valid @RequestBody PatientUpdateDto dto) {
+            PatientResponseDto responseDto = patientService.updatePatient(dto, id);
+
+        return ResponseEntity.ok(ApiResponse.builder()
+                .timestamp(LocalDateTime.now())
+                .status(HttpStatus.OK.value())
+                .message("Patient Updated Successfully")
+                .data(responseDto)
+                .build());
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<ApiResponse<?>> deletePatient(@PathVariable Long id) {
+        patientService.deletePatient(id);
+
+        return ResponseEntity.ok(ApiResponse.builder()
+                .timestamp(LocalDateTime.now())
+                .status(HttpStatus.OK.value())
+                .message("Patient Deleted Successfully")
+                .build());
+    }
+
+
 }
