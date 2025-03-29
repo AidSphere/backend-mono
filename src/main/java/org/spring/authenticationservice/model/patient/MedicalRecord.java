@@ -1,11 +1,7 @@
 package org.spring.authenticationservice.model.patient;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
 import lombok.Data;
-import lombok.NoArgsConstructor;
-import org.spring.authenticationservice.model.Enum.MedicalDocumentType;
-import org.spring.authenticationservice.model.Enum.RecordVisibility;
 import java.util.List;
 
 @Entity
@@ -43,17 +39,5 @@ public class MedicalRecord {
     @CollectionTable(name = "medical_documents", joinColumns = @JoinColumn(name = "record_id"))
     private List<MedicalDocument> medicalDocuments;
 
-}
-
-@Embeddable
-@Data
-@AllArgsConstructor
-@NoArgsConstructor
-class MedicalDocument {
-    private String documentName;
-    private MedicalDocumentType documentType;
-    private String documentUrl;
-    @Enumerated(EnumType.STRING)
-    private RecordVisibility visibility = RecordVisibility.PRIVATE;
 }
 

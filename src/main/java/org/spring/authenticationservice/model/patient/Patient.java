@@ -1,5 +1,6 @@
 package org.spring.authenticationservice.model.patient;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 import lombok.Data;
 import org.hibernate.validator.constraints.URL;
@@ -46,6 +47,7 @@ public class Patient {
 
     @OneToOne
     @JoinColumn(name = "verification_id")
+    @JsonBackReference
     private PatientVerification verification;
 
     @OneToOne(mappedBy = "patient", cascade = CascadeType.ALL, fetch = FetchType.LAZY)

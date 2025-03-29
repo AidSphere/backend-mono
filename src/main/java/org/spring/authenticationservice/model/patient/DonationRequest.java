@@ -1,12 +1,8 @@
 package org.spring.authenticationservice.model.patient;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
 import lombok.Data;
-import lombok.NoArgsConstructor;
-import org.spring.authenticationservice.model.DonationRequestApproval;
 import org.spring.authenticationservice.model.Enum.StatusEnum;
-import org.springframework.data.annotation.CreatedDate;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
@@ -40,9 +36,7 @@ public class DonationRequest {
     @Enumerated(EnumType.STRING)
     private StatusEnum status = StatusEnum.PENDING;
 
-    @CreatedDate
-    @Column(name = "created_at")
-    @Temporal(TemporalType.TIMESTAMP)
+    @Column(name = "created_at", nullable = false, updatable = false)
     private LocalDateTime createdAt;
 
     @Column(name = "expected_date")
@@ -77,15 +71,9 @@ public class DonationRequest {
     @CollectionTable(name = "patient_prescribed_medicines", joinColumns = @JoinColumn(name = "request_id"))
     private List<PrescribedMedicine> prescribedMedicines;
 
-    @OneToOne(mappedBy = "donationRequest", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    private DonationRequestApproval approval;
+    @PrePersist
+    protected void onCreate() {
+        createdAt = LocalDateTime.now();
+    }
 }
 
-@Embeddable
-@Data
-@NoArgsConstructor
-@AllArgsConstructor
-class PrescribedMedicine {
-    private String medicine;
-    private int amount;
-}
