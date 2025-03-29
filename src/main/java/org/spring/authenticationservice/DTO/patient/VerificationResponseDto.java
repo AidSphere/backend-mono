@@ -1,4 +1,4 @@
-package org.spring.authenticationservice.controller.patient;
+package org.spring.authenticationservice.DTO.patient;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.Data;
