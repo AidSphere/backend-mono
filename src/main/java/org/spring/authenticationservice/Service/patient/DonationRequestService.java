@@ -1,9 +1,9 @@
 package org.spring.authenticationservice.Service.patient;
 
 import lombok.RequiredArgsConstructor;
-import org.spring.authenticationservice.DTO.patient.donation.DonationRequestCreateDto;
-import org.spring.authenticationservice.DTO.patient.donation.DonationRequestResponseDto;
-import org.spring.authenticationservice.DTO.patient.donation.DonationRequestUpdateDto;
+import org.spring.authenticationservice.DTO.donation.DonationRequestCreateDto;
+import org.spring.authenticationservice.DTO.donation.DonationRequestResponseDto;
+import org.spring.authenticationservice.DTO.donation.DonationRequestUpdateDto;
 import org.spring.authenticationservice.mapper.patient.DonationRequestMapper;
 import org.spring.authenticationservice.model.Enum.StatusEnum;
 import org.spring.authenticationservice.model.patient.DonationRequest;

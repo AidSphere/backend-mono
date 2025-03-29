@@ -1,4 +1,4 @@
-package org.spring.authenticationservice.DTO.patient.donation;
+package org.spring.authenticationservice.DTO.donation;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.AllArgsConstructor;

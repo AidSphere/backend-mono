@@ -1,4 +1,4 @@
-package org.spring.authenticationservice.DTO.patient.donation;
+package org.spring.authenticationservice.DTO.donation;
 
 import jakarta.validation.constraints.*;
 import lombok.AllArgsConstructor;
@@ -15,9 +15,7 @@ import java.util.List;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class DonationRequestCreateDto {
-    @NotNull(message = "Patient ID is required")
-    private Long patientId;
+public class DonationRequestUpdateDto {
 
     @NotBlank(message = "Title is required")
     @Size(min = 3, max = 100, message = "Title must be between 3 and 100 characters")
@@ -48,4 +46,5 @@ public class DonationRequestCreateDto {
     @NotEmpty(message = "At least one prescribed medicine is required")
     @Size(max = 20, message = "Maximum 20 prescribed medicines allowed")
     private List<PrescribedMedicine> prescribedMedicines;
+
 }
