@@ -50,4 +50,16 @@ public class PatientService {
         Patient savedPatient = patientRepo.save(updatedPatient);
         return mapper.toResponseDto(savedPatient);
     }
+
+    @Transactional
+    public void deletePatient(Long id) {
+        var patient = getPatientById(id);
+
+        // Delete verification first due to foreign key constraint
+        if (patient.getVerification() != null) {
+            verificationRepo.delete(patient.getVerification());
+        }
+
+        patientRepo.delete(patient);
+    }
 }

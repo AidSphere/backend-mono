@@ -50,4 +50,17 @@ public class PatientController {
                 .data(responseDto)
                 .build());
     }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<ApiResponse<?>> deletePatient(@PathVariable Long id) {
+        patientService.deletePatient(id);
+
+        return ResponseEntity.ok(ApiResponse.builder()
+                .timestamp(LocalDateTime.now())
+                .status(HttpStatus.OK.value())
+                .message("Patient Deleted Successfully")
+                .build());
+    }
+
+
 }
