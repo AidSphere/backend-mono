@@ -1,6 +1,8 @@
 package org.spring.authenticationservice.DTO.api;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
+import jakarta.persistence.Temporal;
+import jakarta.persistence.TemporalType;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -16,6 +18,7 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class ApiResponse<T> {
+    @Temporal(TemporalType.TIMESTAMP)
     private LocalDateTime timestamp;
     private int status;
     private T data; // Generic type for the response data
