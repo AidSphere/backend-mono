@@ -6,13 +6,19 @@ import lombok.RequiredArgsConstructor;
 import org.spring.authenticationservice.DTO.patient.PatientCreateDto;
 import org.spring.authenticationservice.DTO.patient.PatientResponseDto;
 import org.spring.authenticationservice.DTO.patient.PatientUpdateDto;
+import org.spring.authenticationservice.Utils.FilterSpecification;
 import org.spring.authenticationservice.mapper.patient.PatientMapper;
 import org.spring.authenticationservice.model.patient.Patient;
 import org.spring.authenticationservice.model.patient.PatientVerification;
 import org.spring.authenticationservice.repository.patient.PatientRepo;
 import org.spring.authenticationservice.repository.patient.PatientVerificationRepo;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.Map;
 
 @Service
 @RequiredArgsConstructor
@@ -62,4 +68,12 @@ public class PatientService {
 
         patientRepo.delete(patient);
     }
+
+    public Page<PatientResponseDto> getPatient(
+            Map<String, String> filters,
+            Pageable pageable) {
+        Specification<Patient> specifications = new FilterSpecification<>(filters);
+        return patientRepo.findAll(specifications, pageable).map(mapper::toResponseDto);
+    }
+
 }
