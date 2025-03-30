@@ -4,9 +4,9 @@ import org.mapstruct.InheritConfiguration;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.MappingTarget;
-import org.spring.authenticationservice.DTO.patient.donation.DonationRequestCreateDto;
-import org.spring.authenticationservice.DTO.patient.donation.DonationRequestResponseDto;
-import org.spring.authenticationservice.DTO.patient.donation.DonationRequestUpdateDto;
+import org.spring.authenticationservice.DTO.donation.DonationRequestCreateDto;
+import org.spring.authenticationservice.DTO.donation.DonationRequestResponseDto;
+import org.spring.authenticationservice.DTO.donation.DonationRequestUpdateDto;
 import org.spring.authenticationservice.model.patient.DonationRequest;
 
 @Mapper(componentModel = "spring")

@@ -6,7 +6,7 @@ import lombok.Data;
 import org.spring.authenticationservice.model.Enum.PatientIDType;
 import org.spring.authenticationservice.model.Enum.StatusEnum;
 
-import java.time.OffsetDateTime;
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Entity
@@ -18,7 +18,7 @@ public class PatientVerification {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long verificationId;
 
-    @OneToOne
+    @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "patient_id", nullable = false)
     @JsonBackReference
     private Patient patient;
@@ -28,7 +28,7 @@ public class PatientVerification {
     private StatusEnum verificationStatus = StatusEnum.PENDING; // PENDING, APPROVED, REJECTED
 
     @Column(name = "verified_at")
-    private OffsetDateTime verifiedAt;
+    private LocalDateTime verifiedAt;
 
     @Column(name = "government_id_type")
     @Enumerated(EnumType.STRING)
@@ -40,6 +40,11 @@ public class PatientVerification {
     @Column(name = "document_url")
     private String governmentIdDocumentUrl; // URL to uploaded NIC or Birth Certificate
 
-    @OneToMany(mappedBy = "patientVerification", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "patientVerification", cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true)
     private List<PatientVerificationDocument> documents; // Multiple documents
+
+    @PrePersist
+    protected void onCreate() {
+        verifiedAt = LocalDateTime.now();
+    }
 }

@@ -3,7 +3,7 @@ package org.spring.authenticationservice.model.patient;
 import jakarta.persistence.*;
 import lombok.Data;
 
-import java.time.OffsetDateTime;
+import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "patient_verification_documents")
@@ -16,9 +16,8 @@ public class PatientVerificationDocument {
     @ManyToOne
     @JoinColumn(name = "verification_id", nullable = false)
     private PatientVerification patientVerification;
-
     private String documentName;
     private String documentUrl;
-    private OffsetDateTime uploadedAt = OffsetDateTime.now();
+    private LocalDateTime uploadedAt = LocalDateTime.now();
 }
 
