@@ -2,15 +2,13 @@ package org.spring.authenticationservice.model.drugImporter;
 
 
 import jakarta.persistence.*;
-import lombok.Data;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 import org.spring.authenticationservice.model.security.User;
 
 @Data
-@Setter
-@Getter
 @Entity
+@AllArgsConstructor
+@NoArgsConstructor
 @Table(name = "drug_importers")
 public class DrugImporter {
 
@@ -49,9 +47,7 @@ public class DrugImporter {
     @Column(length = 1000)
     private String additionalText;
 
-    // Default constructor
-    public DrugImporter() {
-    }
+
 
     // Constructor with user
     public DrugImporter(User user) {

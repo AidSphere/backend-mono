@@ -1,5 +1,8 @@
 package org.spring.authenticationservice.Service;
 
+import org.spring.authenticationservice.DTO.drugImporter.DrugImporterRegisterRequest;
+import org.spring.authenticationservice.DTO.drugImporter.DrugImporterUpdateRequest;
+import org.spring.authenticationservice.model.drugImporter.DrugImporter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -38,4 +41,4 @@ public interface DrugImporterService {
     void activateDrugImporter(String token) throws Exception;
 }
 
-// Implementation
+
