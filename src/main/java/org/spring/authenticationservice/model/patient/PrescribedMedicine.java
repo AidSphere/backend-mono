@@ -11,5 +11,6 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class PrescribedMedicine {
     private String medicine;
-    private Double amount;
+    private String amount;
+    private String unit;
 }
