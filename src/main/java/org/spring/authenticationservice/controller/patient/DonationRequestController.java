@@ -34,7 +34,30 @@ public class DonationRequestController {
                 .build());
     }
 
+    @GetMapping
+    public ResponseEntity<ApiResponse<?>> getAllDonationRequests() {
+        List<DonationRequestResponseDto> requests = donationRequestService.getAllDonationRequests();
+        return ResponseEntity.ok(ApiResponse.builder()
+                .timestamp(LocalDateTime.now())
+                .status(HttpStatus.OK.value())
+                .message("Donation Requests Retrieved Successfully")
+                .data(requests)
+                .build());
+    }
 
+
+    @GetMapping("/approved")
+    public ResponseEntity<ApiResponse<?>> getApprovedDonations() {
+        List<DonationRequestResponseDto> approvedRequests =
+                donationRequestService.getApprovedDonationRequests();
+
+        return ResponseEntity.ok(ApiResponse.builder()
+                .timestamp(LocalDateTime.now())
+                .status(HttpStatus.OK.value())
+                .message("Approved Donation Requests Retrieved Successfully")
+                .data(approvedRequests)
+                .build());
+    }
 
     @PutMapping("/update/{requestId}")
     public ResponseEntity<ApiResponse<?>> updateDonationRequest(
