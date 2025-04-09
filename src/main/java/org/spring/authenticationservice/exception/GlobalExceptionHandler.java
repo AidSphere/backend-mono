@@ -43,6 +43,18 @@ public class GlobalExceptionHandler {
                         .build());
     }
 
+    @ExceptionHandler(InvalidOtpException.class)
+    public ResponseEntity<ApiResponse<Object>> handleInvalidOtp(InvalidOtpException ex, WebRequest request) {
+        log.error("Invalid OTP: {}", ex.getMessage(), ex);
+        return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
+                .body(ApiResponse.builder()
+                        .timestamp(LocalDateTime.now())
+                        .status(HttpStatus.UNAUTHORIZED.value())
+                        .message("Invalid OTP")
+                        .error(ex.getMessage())
+                        .path(request.getDescription(false).replace("uri=", ""))
+                        .build());
+    }
 
 
     @ExceptionHandler(NoResourceFoundException.class)

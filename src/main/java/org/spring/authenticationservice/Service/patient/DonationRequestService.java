@@ -38,23 +38,6 @@ public class DonationRequestService {
         return mapper.toResponseDto(savedRequest);
     }
 
-    @Transactional(readOnly = true)
-    public List<DonationRequestResponseDto> getAllDonationRequests() {
-        List<DonationRequest> requests = donationRequestRepository.findAll();
-        return requests.stream()
-                .map(mapper::toResponseDto)
-                .collect(Collectors.toList());
-    }
-
-    @Transactional(readOnly = true)
-    public List<DonationRequestResponseDto> getApprovedDonationRequests() {
-        List<DonationRequest> approvedRequests = donationRequestRepository
-                .findByStatus(StatusEnum.APPROVED);
-        return approvedRequests.stream()
-                .map(mapper::toResponseDto)
-                .collect(Collectors.toList());
-    }
-
     @Transactional
     public DonationRequestResponseDto updateDonationRequest(Long requestId, DonationRequestUpdateDto dto) {
         DonationRequest existingRequest = donationRequestRepository.findById(requestId)
