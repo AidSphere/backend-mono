@@ -34,8 +34,6 @@ public class DrugImporterServiceImpl implements DrugImporterService {
 
     private static final Logger log = LoggerFactory.getLogger(DrugImporterServiceImpl.class);
 
-    // Token validity period in hours
-    private static final int TOKEN_VALIDITY_HOURS = 24;
 
     @Autowired
     private DrugImporterRepository drugImporterRepository;
@@ -57,45 +55,18 @@ public class DrugImporterServiceImpl implements DrugImporterService {
     public DrugImporter registerDrugImporter(DrugImporterRegisterRequest request) throws Exception {
         log.info("Registering new drug importer with email: {}", request.getEmail());
 
+
+
+
         // Check if email is already in use
         if (userRepository.existsByEmail(request.getEmail())) {
             throw new IllegalArgumentException("Email is already registered");
         }
 
-        // Generate activation token
-        String activationToken = UUID.randomUUID().toString();
-        LocalDateTime tokenExpiry = LocalDateTime.now().plusHours(TOKEN_VALIDITY_HOURS);
-
-        // Create User entity for authentication
-        User user = new User();
-        user.setEmail(request.getEmail());
-        user.setPassword(passwordEncoder.encode(request.getPassword()));
-        user.setEnabled(true); //  should change this into false when use email sending
-
-        // Assign DRUG_IMPORTER role
-        Role drugImporterRole;
-        Optional<Role> existingRole = Optional.ofNullable(roleRepository.findByName("DRUG_IMPORTER"));
-
-        if (existingRole.isPresent()) {
-            drugImporterRole = existingRole.get();
-        } else {
-            // Role doesn't exist, create it
-            log.info("DRUG_IMPORTER not found, creating new role");
-            Role newRole = new Role();
-            newRole.setName("DRUG_IMPORTER");
-            drugImporterRole = roleRepository.save(newRole);
-        }
-        List<Role> roles = new ArrayList<>();
-        roles.add(drugImporterRole);
-        user.setRoles(roles);
-
-        // Save User
-        User savedUser = userRepository.save(user);
 
         // Create drug importer entity
         DrugImporter drugImporter = DrugImporter.builder()
                 .name(request.getName())
-                .user(savedUser)
                 .phone(request.getPhone())
                 .address(request.getAddress())
                 .licenseNumber(request.getLicenseNumber())
@@ -104,54 +75,48 @@ public class DrugImporterServiceImpl implements DrugImporterService {
                 .additionalText(request.getAdditionalText())
                 .nicotineProofUrl(request.getNicotineProofUrl())
                 .licenseProofUrl(request.getLicenseProofUrl())
-                .activationToken(activationToken)
-                .activationTokenExpiry(tokenExpiry)
                 .build();
 
         // Save to database
         DrugImporter savedDrugImporter = drugImporterRepository.save(drugImporter);
         log.info("Drug importer registered successfully with ID: {}", savedDrugImporter.getId());
 
-        // Send activation email
-//        emailService.sendEmail(savedUser.getEmail(), activationToken);
-//        log.info("Activation email sent to: {}", savedUser.getEmail());
-
         return savedDrugImporter;
     }
 
-    @Override
-    @Transactional
-    public void activateDrugImporter(String token) throws Exception {
-        log.info("Activating drug importer account with token: {}", token);
-
-        // Find drug importer by token
-        DrugImporter drugImporter = drugImporterRepository.findByActivationToken(token)
-                .orElseThrow(() -> new InvalidTokenException("Invalid activation token"));
-
-        // Check if token is expired
-        if (drugImporter.getActivationTokenExpiry().isBefore(LocalDateTime.now())) {
-            throw new InvalidTokenException("Activation token has expired");
-        }
-
-        // Activate user account
-        User user = drugImporter.getUser();
-        user.setEnabled(true);
-        userRepository.save(user);
-
-        // Clear activation token
-        drugImporter.setActivationToken(null);
-        drugImporter.setActivationTokenExpiry(null);
-        drugImporterRepository.save(drugImporter);
-
-        log.info("Drug importer account activated: {}", user.getEmail());
-    }
+//    @Override
+//    @Transactional
+//    public void activateDrugImporter(String token) throws Exception {
+//        log.info("Activating drug importer account with token: {}", token);
+//
+//        // Find drug importer by token
+//        DrugImporter drugImporter = drugImporterRepository.findByActivationToken(token)
+//                .orElseThrow(() -> new InvalidTokenException("Invalid activation token"));
+//
+//        // Check if token is expired
+//        if (drugImporter.getActivationTokenExpiry().isBefore(LocalDateTime.now())) {
+//            throw new InvalidTokenException("Activation token has expired");
+//        }
+//
+//        // Activate user account
+//        User user = drugImporter.getUser();
+//        user.setEnabled(true);
+//        userRepository.save(user);
+//
+//        // Clear activation token
+//        drugImporter.setActivationToken(null);
+//        drugImporter.setActivationTokenExpiry(null);
+//        drugImporterRepository.save(drugImporter);
+//
+//        log.info("Drug importer account activated: {}", user.getEmail());
+//    }
 
     @Override
     public DrugImporter findByEmail(String email) throws Exception {
         User user = userRepository.findByEmail(email)
                 .orElseThrow(() -> new ResourceNotFoundException("User not found with email: " + email));
 
-        return drugImporterRepository.findByUser(user)
+        return drugImporterRepository.findByEmail(user.getEmail())
                 .orElseThrow(() -> new ResourceNotFoundException("Drug importer not found for user with email: " + email));
     }
 
@@ -166,83 +131,83 @@ public class DrugImporterServiceImpl implements DrugImporterService {
         return drugImporterRepository.findAll();
     }
 
-    @Override
-    @Transactional
-    public DrugImporter updateDrugImporter(Long id, DrugImporterUpdateRequest request) throws ResourceNotFoundException {
-        log.info("Updating drug importer with ID: {}", id);
+//    @Override
+//    @Transactional
+//    public DrugImporter updateDrugImporter(Long id, DrugImporterUpdateRequest request) throws ResourceNotFoundException {
+//        log.info("Updating drug importer with ID: {}", id);
+//
+//        // Find drug importer
+//        DrugImporter drugImporter = drugImporterRepository.findById(id)
+//                .orElseThrow(() -> new ResourceNotFoundException("Drug importer not found with ID: " + id));
+//
+//        User user = drugImporter.getUser();
+//
+//        // Update fields if provided in request
+//        if (request.getName() != null) {
+//            drugImporter.setName(request.getName());
+//        }
+//
+//        // If email is changing, check that new email is not in use
+//        if (request.getEmail() != null && !request.getEmail().equals(user.getEmail())) {
+//            if (userRepository.existsByEmail(request.getEmail())) {
+//                throw new IllegalArgumentException("Email is already in use");
+//            }
+//            user.setEmail(request.getEmail());
+//            userRepository.save(user);
+//        }
+//
+//        if (request.getPhone() != null) {
+//            drugImporter.setPhone(request.getPhone());
+//        }
+//
+//        if (request.getAddress() != null) {
+//            drugImporter.setAddress(request.getAddress());
+//        }
+//
+//        if (request.getLicenseNumber() != null) {
+//            drugImporter.setLicenseNumber(request.getLicenseNumber());
+//        }
+//
+//        if (request.getWebsite() != null) {
+//            drugImporter.setWebsite(request.getWebsite());
+//        }
+//
+//        if (request.getNic() != null) {
+//            drugImporter.setNic(request.getNic());
+//        }
+//
+//        if (request.getAdditionalText() != null) {
+//            drugImporter.setAdditionalText(request.getAdditionalText());
+//        }
+//
+//        // Handle document URLs
+//        if (request.getNicotineProofUrl() != null) {
+//            drugImporter.setNicotineProofUrl(request.getNicotineProofUrl());
+//        } else if (Boolean.TRUE.equals(request.getRemoveNicotineProof())) {
+//            drugImporter.setNicotineProofUrl(null);
+//        }
+//
+//        if (request.getLicenseProofUrl() != null) {
+//            drugImporter.setLicenseProofUrl(request.getLicenseProofUrl());
+//        } else if (Boolean.TRUE.equals(request.getRemoveLicenseProof())) {
+//            drugImporter.setLicenseProofUrl(null);
+//        }
+//
+//        return drugImporterRepository.save(drugImporter);
+//    }
 
-        // Find drug importer
-        DrugImporter drugImporter = drugImporterRepository.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("Drug importer not found with ID: " + id));
-
-        User user = drugImporter.getUser();
-
-        // Update fields if provided in request
-        if (request.getName() != null) {
-            drugImporter.setName(request.getName());
-        }
-
-        // If email is changing, check that new email is not in use
-        if (request.getEmail() != null && !request.getEmail().equals(user.getEmail())) {
-            if (userRepository.existsByEmail(request.getEmail())) {
-                throw new IllegalArgumentException("Email is already in use");
-            }
-            user.setEmail(request.getEmail());
-            userRepository.save(user);
-        }
-
-        if (request.getPhone() != null) {
-            drugImporter.setPhone(request.getPhone());
-        }
-
-        if (request.getAddress() != null) {
-            drugImporter.setAddress(request.getAddress());
-        }
-
-        if (request.getLicenseNumber() != null) {
-            drugImporter.setLicenseNumber(request.getLicenseNumber());
-        }
-
-        if (request.getWebsite() != null) {
-            drugImporter.setWebsite(request.getWebsite());
-        }
-
-        if (request.getNic() != null) {
-            drugImporter.setNic(request.getNic());
-        }
-
-        if (request.getAdditionalText() != null) {
-            drugImporter.setAdditionalText(request.getAdditionalText());
-        }
-
-        // Handle document URLs
-        if (request.getNicotineProofUrl() != null) {
-            drugImporter.setNicotineProofUrl(request.getNicotineProofUrl());
-        } else if (Boolean.TRUE.equals(request.getRemoveNicotineProof())) {
-            drugImporter.setNicotineProofUrl(null);
-        }
-
-        if (request.getLicenseProofUrl() != null) {
-            drugImporter.setLicenseProofUrl(request.getLicenseProofUrl());
-        } else if (Boolean.TRUE.equals(request.getRemoveLicenseProof())) {
-            drugImporter.setLicenseProofUrl(null);
-        }
-
-        return drugImporterRepository.save(drugImporter);
-    }
-
-    @Override
-    @Transactional
-    public void deleteDrugImporter(Long id) throws Exception {
-        DrugImporter drugImporter = findById(id);
-        User user = drugImporter.getUser();
-
-        // Delete drug importer profile first (due to foreign key constraint)
-        drugImporterRepository.delete(drugImporter);
-
-        // Then delete the user account
-        userRepository.delete(user);
-
-        log.info("Drug importer with ID {} and associated user account deleted", id);
-    }
+//    @Override
+//    @Transactional
+//    public void deleteDrugImporter(Long id) throws Exception {
+//        DrugImporter drugImporter = findById(id);
+//        User user = drugImporter.getUser();
+//
+//        // Delete drug importer profile first (due to foreign key constraint)
+//        drugImporterRepository.delete(drugImporter);
+//
+//        // Then delete the user account
+//        userRepository.delete(user);
+//
+//        log.info("Drug importer with ID {} and associated user account deleted", id);
+//    }
 }

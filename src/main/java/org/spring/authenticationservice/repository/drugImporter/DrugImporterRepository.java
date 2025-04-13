@@ -17,29 +17,23 @@ import java.util.Optional;
 @Repository
 public interface DrugImporterRepository extends JpaRepository<DrugImporter, Long> {
 
+
+    //find by email
     /**
-     * Find a drug importer by activation token
+     * Find a drug importer by email
      *
-     * @param token The activation token
+     * @param email The email address
      * @return Optional containing the drug importer if found
      */
-    Optional<DrugImporter> findByActivationToken(String token);
+    Optional<DrugImporter> findByEmail(String email);
 
-    /**
-     * Find a drug importer by associated User entity
-     *
-     * @param user The User entity
-     * @return Optional containing the drug importer if found
-     */
-    Optional<DrugImporter> findByUser(User user);
-
-    /**
-     * Check if a drug importer exists for a given user
-     *
-     * @param user The User entity
-     * @return true if exists, false otherwise
-     */
-    boolean existsByUser(User user);
+//    /**
+//     * Check if a drug importer exists for a given user
+//     *
+//     * @param user The User entity
+//     * @return true if exists, false otherwise
+//     */
+//    boolean existsByUser(User user);
 
     /**
      * Find drug importers with names containing the given string (case insensitive)
@@ -65,13 +59,13 @@ public interface DrugImporterRepository extends JpaRepository<DrugImporter, Long
      */
     boolean existsByLicenseNumber(String licenseNumber);
 
-    /**
-     * Find all enabled drug importers (associated with enabled users)
-     *
-     * @return List of enabled drug importers
-     */
-    @Query("SELECT di FROM DrugImporter di JOIN di.user u WHERE u.isEnabled = true")
-    List<DrugImporter> findAllEnabled();
+//    /**
+//     * Find all enabled drug importers (associated with enabled users)
+//     *
+//     * @return List of enabled drug importers
+//     */
+//    @Query("SELECT di FROM DrugImporter di JOIN di.user u WHERE u.isEnabled = true")
+//    List<DrugImporter> findAllEnabled();
 
     /**
      * Find all drug importers with expiring licenses (within specified days)
