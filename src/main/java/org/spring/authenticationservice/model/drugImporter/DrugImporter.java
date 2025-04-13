@@ -32,12 +32,10 @@ public class DrugImporter {
     @Column(nullable = false)
     private String name;
 
-    // One-to-One relationship with User entity
-    @OneToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "user_id", nullable = false)
-    private User user;
 
     private String phone;
+
+    private String email;
 
     private String address;
 
@@ -58,12 +56,6 @@ public class DrugImporter {
     @Column(name = "license_proof_url")
     private String licenseProofUrl;
 
-    @Column(name = "activation_token")
-    private String activationToken;
-
-    @Column(name = "activation_token_expiry")
-    private LocalDateTime activationTokenExpiry;
-
     @CreationTimestamp
     @Column(name = "created_at", nullable = false, updatable = false)
     private LocalDateTime createdAt;
@@ -72,17 +64,4 @@ public class DrugImporter {
     @Column(name = "updated_at")
     private LocalDateTime updatedAt;
 
-    /**
-     * Convenience method to get email from associated User
-     */
-    public String getEmail() {
-        return user != null ? user.getEmail() : null;
-    }
-
-    /**
-     * Convenience method to check if account is enabled from associated User
-     */
-    public boolean isEnabled() {
-        return user != null && user.isEnabled();
-    }
 }
