@@ -5,6 +5,7 @@ import org.spring.authenticationservice.DTO.donation.DonationRequestCreateDto;
 import org.spring.authenticationservice.DTO.donation.DonationRequestResponseDto;
 import org.spring.authenticationservice.DTO.donation.DonationRequestUpdateDto;
 import org.spring.authenticationservice.mapper.patient.DonationRequestMapper;
+import org.spring.authenticationservice.mapper.patient.donation.DonationRequestMapperMannual;
 import org.spring.authenticationservice.model.Enum.StatusEnum;
 import org.spring.authenticationservice.model.patient.DonationRequest;
 import org.spring.authenticationservice.model.patient.Patient;
@@ -65,7 +66,6 @@ public class DonationRequestService {
         donationRequestRepository.delete(existingRequest);
     }
 
-
     @Transactional(readOnly = true)
     public List<DonationRequestResponseDto> getPendingDonationRequests() {
         List<DonationRequest> pendingRequests = donationRequestRepository
@@ -74,6 +74,22 @@ public class DonationRequestService {
                 .map(mapper::toResponseDto)
                 .collect(Collectors.toList());
     }
+
+    @Transactional(readOnly = true)
+    public List<DonationRequestResponseDto> getRejectedDonationRequests() {
+        List<DonationRequest> rejectedRequests = donationRequestRepository
+                .findByStatus(StatusEnum.REJECTED);
+
+        return rejectedRequests.stream()
+                .map(donationRequest -> {
+                    DonationRequestResponseDto dto = new DonationRequestResponseDto();
+                    return DonationRequestMapperMannual.toDonationResponseDto(donationRequest, dto);
+                })
+                .collect(Collectors.toList());
+
+    }
+
+
 
     @Transactional
     public DonationRequestResponseDto updateConfirmation(
