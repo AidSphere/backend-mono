@@ -13,6 +13,7 @@ import org.spring.authenticationservice.Service.security.AuthService;
 import org.spring.authenticationservice.controller.drugImporter.DrugImporterController;
 import org.spring.authenticationservice.mapper.patient.PatientMapper;
 import org.spring.authenticationservice.model.donor.Donor;
+import org.spring.authenticationservice.model.security.User;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -83,17 +84,18 @@ public class AccountController {
     }
 
     @GetMapping("/users")
-    public ResponseEntity<ApiResponse<?>> getAllUsers() {
+    public ResponseEntity<ApiResponse<?>> getUserByEmail(@RequestParam String email) {
 
-        //get all users from authservices as a list and return
-        List<?> users = authService.getAllUsers();
+        Object user = authService.getUserByEmail(email);
+        System.out.println(user);
 
 
         return ResponseEntity.ok(ApiResponse.builder()
                 .timestamp(LocalDateTime.now())
                 .status(HttpStatus.OK.value())
-                .message("Fetched all users successfully")
-                .data(users) // Replace with actual user data
+                .message("Fetched user by email successfully")
+                .data(user)
                 .build());
     }
+
 }
