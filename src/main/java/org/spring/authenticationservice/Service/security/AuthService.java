@@ -18,6 +18,7 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
@@ -171,5 +172,16 @@ public class AuthService {
             return false;
         }
         throw new BadCredentialsException("Invalid verification token");
+    }
+
+    public List<?> getAllUsers() {
+        List<User> users = userRepository.findAll();
+        return users.stream()
+                .map(user -> Map.of(
+                        "email", user.getEmail(),
+                        "roles", user.getRoles().stream().map(Role::getName).toList(),
+                        "enabled", user.isEnabled()
+                ))
+                .toList();
     }
 }
