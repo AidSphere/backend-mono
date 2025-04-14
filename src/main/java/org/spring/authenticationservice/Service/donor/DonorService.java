@@ -13,5 +13,4 @@ public interface DonorService {
 
     DonorRegDto getDonorById(Long id);
 
-
 }

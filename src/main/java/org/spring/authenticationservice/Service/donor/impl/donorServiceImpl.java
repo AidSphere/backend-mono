@@ -81,6 +81,17 @@ public class donorServiceImpl implements DonorService {
 
     @Override
     public DonorRegDto getDonorById(Long id) {
-        return null;
+        Donor donor = donorRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Donor not found with id: " + id));
+
+        return DonorRegDto.builder()
+                .firstName(donor.getFirstName())
+                .lastName(donor.getLastName())
+                .email(donor.getEmail())
+                .phone(donor.getPhone())
+                .nic(donor.getNic())
+                .dob(donor.getDob())
+                .address(donor.getAddress())
+                .build();
     }
 }

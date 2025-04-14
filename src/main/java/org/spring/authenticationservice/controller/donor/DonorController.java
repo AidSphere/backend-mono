@@ -74,6 +74,18 @@ public class DonorController {
     }
 
     //get donor profile
+    @GetMapping("/{id}")
+    public ResponseEntity<ApiResponse<?>> getDonor(@PathVariable Long id) {
+        DonorRegDto donor = donorService.getDonorById(id);
+
+        return ResponseEntity.status(HttpStatus.OK)
+                .body(ApiResponse.builder()
+                        .timestamp(LocalDateTime.now())
+                        .status(HttpStatus.OK.value())
+                        .message("Donor Fetched Successfully")
+                        .data(donor)
+                        .build());
+    }
 
 
 
