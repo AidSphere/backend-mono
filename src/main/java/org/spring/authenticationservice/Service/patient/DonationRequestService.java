@@ -109,4 +109,15 @@ public class DonationRequestService {
         return mapper.toResponseDto(savedRequest);
     }
 
+    public List<DonationRequestResponseDto> getAllDonationPatientRequests() {
+        //need to get the donation request where status is PATIENT_APPROVED
+        List<DonationRequest> donationRequests = donationRequestRepository
+                .findByStatus(StatusEnum.PATIENT_APPROVED);
+        return donationRequests.stream()
+                .map(donationRequest -> {
+                    DonationRequestResponseDto dto = new DonationRequestResponseDto();
+                    return DonationRequestMapperMannual.toDonationResponseDto(donationRequest, dto);
+                })
+                .collect(Collectors.toList());
+    }
 }

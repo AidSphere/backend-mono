@@ -70,7 +70,6 @@ public class DonorController {
                             .build());
         }
 
-
     }
 
     //get donor profile
