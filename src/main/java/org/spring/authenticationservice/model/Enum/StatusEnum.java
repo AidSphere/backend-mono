@@ -4,5 +4,6 @@ public enum StatusEnum {
     PENDING,
     REJECTED,
     ADMIN_APPROVED,
+    QUOTATION_ISSUED,
     PATIENT_APPROVED
 }
