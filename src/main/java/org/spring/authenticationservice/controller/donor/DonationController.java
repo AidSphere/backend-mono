@@ -25,10 +25,19 @@ public class DonationController {
 
     //get all donations not hidden
 
-    //list donation request accept by patient
+    //admin approved but not accepted
+    @GetMapping("/notAccepted")
+    public ResponseEntity<ApiResponse<?>> getDonationRequestNotAccepted() {
+        //use donation requests as a list
+        List<DonationRequestResponseDto> donationRequests = donationRequestService.getAllDonationPatientRequestsNotAccepted();
+        return ResponseEntity.ok(ApiResponse.builder()
+                .message("Donation Requests fetched successfully")
+                .data(donationRequests)
+                .build());
+    }
 
 
-    //list donation request not accept by patient
+    //list donation request
     @GetMapping("/donationRequest")
     public ResponseEntity<ApiResponse<?>> getDonationRequest() {
         //use donation requests as a list

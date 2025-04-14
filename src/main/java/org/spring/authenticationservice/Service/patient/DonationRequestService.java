@@ -120,4 +120,16 @@ public class DonationRequestService {
                 })
                 .collect(Collectors.toList());
     }
+
+    public List<DonationRequestResponseDto> getAllDonationPatientRequestsNotAccepted() {
+        //need to get the donation request where status is PATIENT_APPROVED
+        List<DonationRequest> donationRequests = donationRequestRepository
+                .findByStatus(StatusEnum.ADMIN_APPROVED);
+        return donationRequests.stream()
+                .map(donationRequest -> {
+                    DonationRequestResponseDto dto = new DonationRequestResponseDto();
+                    return DonationRequestMapperMannual.toDonationResponseDto(donationRequest, dto);
+                })
+                .collect(Collectors.toList());
+    }
 }
