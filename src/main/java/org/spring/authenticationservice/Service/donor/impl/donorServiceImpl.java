@@ -1,7 +1,6 @@
 package org.spring.authenticationservice.Service.donor.impl;
 
 import lombok.AllArgsConstructor;
-import lombok.Builder;
 import org.spring.authenticationservice.DTO.donor.DonorRegDto;
 import org.spring.authenticationservice.Service.donor.DonorService;
 import org.spring.authenticationservice.model.donor.Donor;
@@ -54,6 +53,8 @@ public class donorServiceImpl implements DonorService {
         // Save the updated donor
         Donor updatedDonor = donorRepository.save(donor);
 
+        //update the users table as well
+
         return DonorRegDto.builder()
                 .firstName(updatedDonor.getFirstName())
                 .lastName(updatedDonor.getLastName())
@@ -66,8 +67,16 @@ public class donorServiceImpl implements DonorService {
     }
 
     @Override
-    public void deleteDonor(Long id) {
+    public boolean deleteDonor(Long id) {
 
+        Donor donor = donorRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Donor not found with id: " + id));
+
+        //also delete from the users table uncheck is deleted button
+
+        // Delete the donor
+        donorRepository.delete(donor);
+        return true;
     }
 
     @Override

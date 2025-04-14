@@ -9,7 +9,7 @@ public interface DonorService {
 
     DonorRegDto updateDonor(DonorRegDto dto, Long id);
 
-    void deleteDonor(Long id);
+    boolean deleteDonor(Long id);
 
     DonorRegDto getDonorById(Long id);
 
