@@ -1,11 +1,13 @@
 package org.spring.authenticationservice.DTO.donor;
 
 import jakarta.validation.constraints.*;
+import lombok.Builder;
 import lombok.Data;
 
 import java.util.Date;
 
 @Data
+@Builder
 public class DonorRegDto {
 
     @NotEmpty(message = "FirstName can not be a null or empty")
