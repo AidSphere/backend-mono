@@ -1,6 +1,7 @@
 package org.spring.authenticationservice.Service.donor.impl;
 
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import org.spring.authenticationservice.DTO.donor.DonorRegDto;
 import org.spring.authenticationservice.Service.donor.DonorService;
 import org.spring.authenticationservice.model.donor.Donor;
@@ -37,7 +38,31 @@ public class donorServiceImpl implements DonorService {
 
     @Override
     public DonorRegDto updateDonor(DonorRegDto dto, Long id) {
-        return null;
+
+        Donor donor = donorRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Donor not found with id: " + id));
+
+        // Update the donor's details
+        donor.setFirstName(dto.getFirstName());
+        donor.setLastName(dto.getLastName());
+        donor.setEmail(dto.getEmail());
+        donor.setPhone(dto.getPhone());
+        donor.setNic(dto.getNic());
+        donor.setDob(dto.getDob());
+        donor.setAddress(dto.getAddress());
+
+        // Save the updated donor
+        Donor updatedDonor = donorRepository.save(donor);
+
+        return DonorRegDto.builder()
+                .firstName(updatedDonor.getFirstName())
+                .lastName(updatedDonor.getLastName())
+                .email(updatedDonor.getEmail())
+                .phone(updatedDonor.getPhone())
+                .nic(updatedDonor.getNic())
+                .dob(updatedDonor.getDob())
+                .address(updatedDonor.getAddress())
+                .build();
     }
 
     @Override
