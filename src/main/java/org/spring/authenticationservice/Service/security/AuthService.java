@@ -202,4 +202,15 @@ public class AuthService {
         }
     }
 
+    public void resetPassword(String email, String newPassword) {
+        User user = userRepository.findByEmail(email)
+                .orElseThrow(() -> new UsernameNotFoundException("User not found with email: " + email));
+
+        if (user != null) {
+            user.setPassword(encoder.encode(newPassword));
+            userRepository.save(user);
+        } else {
+            throw new UsernameNotFoundException("User not found with email: " + email);
+        }
+    }
 }
