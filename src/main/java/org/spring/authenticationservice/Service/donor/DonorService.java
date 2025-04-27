@@ -5,7 +5,7 @@ import org.spring.authenticationservice.model.donor.Donor;
 
 public interface DonorService {
 
-    Donor createDonor(DonorRegDto dto);
+    Donor createDonor(DonorRegDto dto) throws Exception;
 
     DonorRegDto updateDonor(DonorRegDto dto, Long id);
 

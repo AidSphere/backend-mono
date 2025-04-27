@@ -2,7 +2,9 @@ package org.spring.authenticationservice.Service.donor.impl;
 
 import lombok.AllArgsConstructor;
 import org.spring.authenticationservice.DTO.donor.DonorRegDto;
+import org.spring.authenticationservice.DTO.security.RegisterUserDto;
 import org.spring.authenticationservice.Service.donor.DonorService;
+import org.spring.authenticationservice.Service.security.AuthService;
 import org.spring.authenticationservice.Service.security.EmailService;
 import org.spring.authenticationservice.Service.security.JwtService;
 import org.spring.authenticationservice.model.donor.Donor;
@@ -26,9 +28,10 @@ public class donorServiceImpl implements DonorService {
     private JwtService jwtService;
     private RoleRepository roleRepository;
     private EmailService emailService;
+    private AuthService authService;
 
     @Override
-    public Donor createDonor(DonorRegDto dto) {
+    public Donor createDonor(DonorRegDto dto) throws Exception {
         if(userRepository.existsByEmail(dto.getEmail())) {
             throw new RuntimeException("User already exists with email: " + dto.getEmail());
         }
@@ -43,6 +46,15 @@ public class donorServiceImpl implements DonorService {
                 .dob(dto.getDob())
                 .address(dto.getAddress())
                 .build();
+
+        //need to setup seperate function later
+        RegisterUserDto userDto = new RegisterUserDto();
+        userDto.setEmail(dto.getEmail());
+        userDto.setPassword(dto.getPassword());
+        userDto.setRoles("DONOR");
+        authService.RegisterUser(userDto);
+
+
 
         return donorRepository.save(donor);
     }
