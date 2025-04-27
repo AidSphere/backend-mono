@@ -6,7 +6,9 @@ import org.slf4j.LoggerFactory;
 import org.spring.authenticationservice.DTO.drugImporter.DrugImporterRegisterRequest;
 import org.spring.authenticationservice.DTO.drugImporter.DrugImporterUpdateRequest;
 
+import org.spring.authenticationservice.DTO.security.RegisterUserDto;
 import org.spring.authenticationservice.Service.drugImporter.DrugImporterService;
+import org.spring.authenticationservice.Service.security.AuthService;
 import org.spring.authenticationservice.Service.security.EmailService;
 import org.spring.authenticationservice.Service.security.JwtService;
 import org.spring.authenticationservice.exception.InvalidTokenException;
@@ -45,6 +47,7 @@ public class DrugImporterServiceImpl implements DrugImporterService {
     private EmailService emailService;
     private PasswordEncoder encoder;
     private JwtService jwtService;
+    private AuthService authService;
 
 
     @Override
@@ -76,6 +79,14 @@ public class DrugImporterServiceImpl implements DrugImporterService {
 
         // Save to database
         DrugImporter savedDrugImporter = drugImporterRepository.save(drugImporter);
+
+        //need to setup seperate function later
+        RegisterUserDto userDto = new RegisterUserDto();
+        userDto.setEmail(request.getEmail());
+        userDto.setPassword(request.getPassword());
+        userDto.setRoles("DRUG_IMPORTER");
+        authService.RegisterUser(userDto);
+
         log.info("Drug importer registered successfully with ID: {}", savedDrugImporter.getId());
 
         return savedDrugImporter;
