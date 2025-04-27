@@ -13,4 +13,6 @@ public interface DonorService {
 
     DonorRegDto getDonorById(Long id);
 
+    Donor createDonorByAdmin(DonorRegDto dto);
+
 }
