@@ -7,6 +7,7 @@ import org.spring.authenticationservice.Service.patient.DonationRequestService;
 import org.spring.authenticationservice.model.patient.DonationRequest;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -19,7 +20,7 @@ public class DonationController {
 
     private final DonationRequestService donationRequestService;
 
-    //create donation
+    //create donation request
 
     //get donation by user
 

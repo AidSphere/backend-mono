@@ -21,7 +21,7 @@ public class DonorController {
 
     //create donor
     @PostMapping("")
-    public ResponseEntity<ApiResponse<?>> createDonor(@Valid @RequestBody DonorRegDto dto) {
+    public ResponseEntity<ApiResponse<?>> createDonor(@Valid @RequestBody DonorRegDto dto) throws Exception {
         Donor createdDonor = donorService.createDonor(dto);
 
         return ResponseEntity.status(HttpStatus.CREATED)
