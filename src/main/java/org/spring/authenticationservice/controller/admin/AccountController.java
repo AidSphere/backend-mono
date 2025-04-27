@@ -54,7 +54,7 @@ public class AccountController {
     //create donor
     @PostMapping("/createDonor")
     public ResponseEntity<ApiResponse<?>> createDonor(@Valid @RequestBody DonorRegDto dto) {
-        Donor createdDonor = donorService.createDonor(dto);
+        Donor createdDonor = donorService.createDonorByAdmin(dto);
 
         return ResponseEntity.status(HttpStatus.CREATED)
                 .body(ApiResponse.builder()

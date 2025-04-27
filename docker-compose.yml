@@ -5,9 +5,9 @@ services:
     image: postgres:latest
     container_name: postgres_container_auth
     environment:
-      POSTGRES_USER: test         # This creates the 'test' user by default
+      POSTGRES_USER: test
       POSTGRES_PASSWORD: 1234
-      POSTGRES_DB: auth           # This creates the 'auth' database
+      POSTGRES_DB: auth
     ports:
       - "5432:5432"
     volumes:
@@ -15,6 +15,14 @@ services:
     networks:
       - mynetwork
 
+  redis:
+    image: redis:latest
+    container_name: redis_container_auth
+    ports:
+      - "6379:6379"
+    command: ["redis-server", "--requirepass", "MyFakeRedisPass123"] # setting password
+    networks:
+      - mynetwork
 
 volumes:
   postgres_data:
