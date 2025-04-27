@@ -23,6 +23,10 @@ public class User {
     @Column(nullable = false)
     private boolean isEnabled = true;
 
+    @Column(nullable = false)
+    @Enumerated(EnumType.STRING)
+    private AccessControl adminApproval = AccessControl.PENDING;
+
     @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(
             name = "user_roles",
