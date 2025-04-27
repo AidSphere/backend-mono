@@ -1,19 +1,24 @@
 package org.spring.authenticationservice.DTO.security;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 import java.util.ArrayList;
 import java.util.List;
 
 public class RegisterUserDto {
+    @JsonProperty("email")
     private String email;
+    @JsonProperty("password")
     private String password;
-    private List<String> roles = new ArrayList<>();
+    @JsonProperty("role")
+    private String role;
 
-    public List<String> getRoles() {
-        return roles;
+    public String getRole() {
+        return role;
     }
 
-    public void setRoles(List<String> roles) {
-        this.roles = roles;
+    public void setRoles(String roles) {
+        this.role = roles;
     }
 
     public String getEmail() {
