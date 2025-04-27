@@ -80,6 +80,8 @@ public class authController {
 
     }
 
+    //hard reset password by admin
+
     @GetMapping("/forgotten-password")
     public ResponseEntity<?> passwordResetLink(@RequestParam String email){
         try{
