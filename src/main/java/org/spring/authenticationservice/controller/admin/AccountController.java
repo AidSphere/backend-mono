@@ -13,6 +13,7 @@ import org.spring.authenticationservice.Service.security.AuthService;
 import org.spring.authenticationservice.controller.drugImporter.DrugImporterController;
 import org.spring.authenticationservice.mapper.patient.PatientMapper;
 import org.spring.authenticationservice.model.donor.Donor;
+import org.spring.authenticationservice.model.security.ResetPasswordRequest;
 import org.spring.authenticationservice.model.security.User;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -97,5 +98,16 @@ public class AccountController {
                 .data(user)
                 .build());
     }
+
+    @PostMapping("/reset-password")
+    public ResponseEntity<ApiResponse<?>> resetPassword(@RequestBody ResetPasswordRequest request) {
+        authService.resetPassword(request.getEmail(), request.getNewPassword());
+        return ResponseEntity.ok(ApiResponse.builder()
+                .timestamp(LocalDateTime.now())
+                .status(HttpStatus.OK.value())
+                .message("Password reset successfully")
+                .build());
+    }
+
 
 }
