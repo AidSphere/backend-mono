@@ -30,6 +30,8 @@ public interface DrugImporterService {
 
     List<DrugImporter> findAll();
 
+    DrugImporter registerDrugImporterByAdmin(DrugImporterRegisterRequest registerDto) throws Exception;
+
 //    DrugImporter updateDrugImporter(Long id,
 //                                    DrugImporterUpdateRequest updateDto) throws ResourceNotFoundException;
 
