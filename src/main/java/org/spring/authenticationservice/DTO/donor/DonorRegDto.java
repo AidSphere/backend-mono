@@ -36,4 +36,7 @@ public class DonorRegDto {
     @NotEmpty(message = "Address can not be a null or empty")
     private String address;
 
+    @NotEmpty(message = "Password not be a null or empty")
+    private String password;
+
 }
