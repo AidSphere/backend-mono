@@ -14,6 +14,7 @@ import org.spring.authenticationservice.Service.security.JwtService;
 import org.spring.authenticationservice.exception.InvalidTokenException;
 import org.spring.authenticationservice.exception.ResourceNotFoundException;
 import org.spring.authenticationservice.model.drugImporter.DrugImporter;
+import org.spring.authenticationservice.model.security.AccessControl;
 import org.spring.authenticationservice.model.security.Role;
 import org.spring.authenticationservice.model.security.User;
 import org.spring.authenticationservice.repository.drugImporter.DrugImporterRepository;
@@ -55,9 +56,6 @@ public class DrugImporterServiceImpl implements DrugImporterService {
     public DrugImporter registerDrugImporter(DrugImporterRegisterRequest request) throws Exception {
         log.info("Registering new drug importer with email: {}", request.getEmail());
 
-
-
-
         // Check if email is already in use
         if (userRepository.existsByEmail(request.getEmail())) {
             throw new IllegalArgumentException("Email is already registered");
@@ -70,6 +68,7 @@ public class DrugImporterServiceImpl implements DrugImporterService {
                 .phone(request.getPhone())
                 .address(request.getAddress())
                 .licenseNumber(request.getLicenseNumber())
+                .email(request.getEmail())
                 .website(request.getWebsite())
                 .nic(request.getNic())
                 .additionalText(request.getAdditionalText())
@@ -185,6 +184,21 @@ public class DrugImporterServiceImpl implements DrugImporterService {
         }
 
         return importer;
+    }
+
+    @Override
+    public List<DrugImporter> getPendingDrugImporters() throws ResourceNotFoundException {
+        List<User> pendingUsers = userRepository.findByAdminApproval(AccessControl.PENDING);
+        if (pendingUsers.isEmpty()) {
+            throw new ResourceNotFoundException("No pending drug importers found");
+        }
+        List<DrugImporter> pendingDrugImporters = new ArrayList<>();
+        for (User user : pendingUsers) {
+            DrugImporter drugImporter = drugImporterRepository.findByEmail(user.getEmail())
+                    .orElseThrow(() -> new ResourceNotFoundException("Drug importer not found with email: " + user.getEmail()));
+            pendingDrugImporters.add(drugImporter);
+        }
+        return pendingDrugImporters;
     }
 
 
