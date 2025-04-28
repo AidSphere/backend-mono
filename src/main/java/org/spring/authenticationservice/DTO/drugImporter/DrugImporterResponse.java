@@ -1,5 +1,7 @@
 package org.spring.authenticationservice.DTO.drugImporter;
 
+
+
 public class DrugImporterResponse {
 
     private Long id;
@@ -15,6 +17,15 @@ public class DrugImporterResponse {
     // Default constructor
     public DrugImporterResponse() {
     }
+
+    public DrugImporterResponse(Long id, String name, String email, String phone, String licenseNumber) {
+        this.id = id;
+        this.name = name;
+        this.email = email;
+        this.phone = phone;
+        this.licenseNumber = licenseNumber;
+    }
+
 
     // Getter and Setter for id
     public Long getId() {
