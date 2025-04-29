@@ -7,7 +7,10 @@ import org.spring.authenticationservice.Service.donor.DonorService;
 import org.spring.authenticationservice.Service.security.AuthService;
 import org.spring.authenticationservice.Service.security.EmailService;
 import org.spring.authenticationservice.Service.security.JwtService;
+import org.spring.authenticationservice.exception.ResourceNotFoundException;
 import org.spring.authenticationservice.model.donor.Donor;
+import org.spring.authenticationservice.model.drugImporter.DrugImporter;
+import org.spring.authenticationservice.model.security.AccessControl;
 import org.spring.authenticationservice.model.security.Role;
 import org.spring.authenticationservice.model.security.User;
 import org.spring.authenticationservice.repository.donor.DonorRepository;
@@ -16,6 +19,8 @@ import org.spring.authenticationservice.repository.security.UserRepository;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 
 @AllArgsConstructor
@@ -107,6 +112,22 @@ public class donorServiceImpl implements DonorService {
         }
 
         return donor;
+    }
+
+    @Override
+    public List<Donor> getPendingDonors() throws ResourceNotFoundException {
+        List<User> pendingUsers = userRepository.findByAdminApproval(AccessControl.PENDING);
+        if (pendingUsers.isEmpty()) {
+            throw new ResourceNotFoundException("No pending drug importers found");
+        }
+        List<Donor> pendingDonors = new ArrayList<>();
+        for (User user : pendingUsers) {
+            Donor donor = donorRepository.findByEmail(user.getEmail())
+                    .orElseThrow(() -> new ResourceNotFoundException("Drug importer not found with email: " + user.getEmail()));
+            pendingDonors.add(donor);
+        }
+        return pendingDonors;
+
     }
 
 

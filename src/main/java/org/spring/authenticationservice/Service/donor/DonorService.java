@@ -1,7 +1,11 @@
 package org.spring.authenticationservice.Service.donor;
 
 import org.spring.authenticationservice.DTO.donor.DonorRegDto;
+import org.spring.authenticationservice.exception.ResourceNotFoundException;
 import org.spring.authenticationservice.model.donor.Donor;
+import org.spring.authenticationservice.model.drugImporter.DrugImporter;
+
+import java.util.List;
 
 public interface DonorService {
 
@@ -15,4 +19,5 @@ public interface DonorService {
 
     Donor createDonorByAdmin(DonorRegDto dto);
 
+    List<Donor> getPendingDonors() throws ResourceNotFoundException;
 }

@@ -2,9 +2,12 @@ package org.spring.authenticationservice.controller.admin;
 
 import lombok.AllArgsConstructor;
 import org.spring.authenticationservice.DTO.api.ApiResponse;
+import org.spring.authenticationservice.DTO.donor.DonorResponseDTO;
 import org.spring.authenticationservice.DTO.drugImporter.DrugImporterResponse;
+import org.spring.authenticationservice.Service.donor.DonorService;
 import org.spring.authenticationservice.Service.drugImporter.DrugImporterService;
 import org.spring.authenticationservice.exception.ResourceNotFoundException;
+import org.spring.authenticationservice.model.donor.Donor;
 import org.spring.authenticationservice.model.drugImporter.DrugImporter;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -22,6 +25,7 @@ import java.util.stream.Collectors;
 public class AccessController {
 
     private DrugImporterService drugImporterService;
+    private DonorService donorService;
 
 
     //drug importer pending
@@ -46,6 +50,27 @@ public class AccessController {
     }
 
     //donor pending
+    @GetMapping("/access/donor/pending")
+    public ResponseEntity<ApiResponse<List<DonorResponseDTO>>> getPendingDonors() throws ResourceNotFoundException {
+        List<Donor> pendingDonors = donorService.getPendingDonors();
+        List<DonorResponseDTO> donorResponses = pendingDonors.stream()
+                .map(donor -> new DonorResponseDTO(
+                        donor.getId(),
+                        donor.getFirstName(),
+                        donor.getLastName(),
+                        donor.getEmail(),
+                        donor.getPhone(),
+                        donor.getNic()
+                ))
+                .collect(Collectors.toList());
+
+        return ResponseEntity.ok(ApiResponse.<List<DonorResponseDTO>>builder()
+                .status(HttpStatus.OK.value())
+                .message("Pending donors retrieved successfully")
+                .data(donorResponses)
+                .timestamp(LocalDateTime.now())
+                .build());
+    }
 
     //patient pending
 
