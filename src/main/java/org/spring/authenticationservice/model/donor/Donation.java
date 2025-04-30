@@ -2,6 +2,7 @@ package org.spring.authenticationservice.model.donor;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.spring.authenticationservice.model.patient.DonationRequest;
@@ -12,11 +13,12 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
+@Builder
 @Table(name = "donation")
 public class Donation {
 
     @Id
-    private String id;
+    private Long id;
 
     @ManyToOne
     @JoinColumn(name = "donor_id", nullable = false)

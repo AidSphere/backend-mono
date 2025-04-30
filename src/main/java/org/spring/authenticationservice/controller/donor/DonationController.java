@@ -3,7 +3,10 @@ package org.spring.authenticationservice.controller.donor;
 import lombok.AllArgsConstructor;
 import org.spring.authenticationservice.DTO.api.ApiResponse;
 import org.spring.authenticationservice.DTO.donation.DonationRequestResponseDto;
+import org.spring.authenticationservice.DTO.donor.CreateDonationDTO;
+import org.spring.authenticationservice.Service.donor.DonationService;
 import org.spring.authenticationservice.Service.patient.DonationRequestService;
+import org.spring.authenticationservice.model.donor.Donation;
 import org.spring.authenticationservice.model.patient.DonationRequest;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -18,13 +21,20 @@ import java.util.List;
 @RestController
 public class DonationController {
 
+    private final DonationService donationService;
     private final DonationRequestService donationRequestService;
 
     //create donation request
+    @PostMapping("payment")
+    public ResponseEntity<ApiResponse<?>> createDonationRequest(CreateDonationDTO createDonationDTO) {
+        Donation donation = donationService.createDonation(createDonationDTO);
+        return ResponseEntity.ok(ApiResponse.builder()
+                .message("Donation Requests fetched successfully")
+                .data(donation)
+                .build());
+    }
 
     //get donation by user
-
-    //get all donations not hidden
 
     //admin approved but not accepted
     @GetMapping("/notAccepted")
