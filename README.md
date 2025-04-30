@@ -58,8 +58,8 @@
 
 ## 📦 Project Structure
 
-/aidsphere-backend -> Spring Boot REST APIs  
-/aidsphere-frontend -> Next.js frontend
+./aidsphere-backend -> Spring Boot REST APIs  
+./aidsphere-frontend -> Next.js frontend
 
 ---
 
