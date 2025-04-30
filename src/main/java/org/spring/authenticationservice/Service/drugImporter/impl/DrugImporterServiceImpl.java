@@ -188,15 +188,17 @@ public class DrugImporterServiceImpl implements DrugImporterService {
 
     @Override
     public List<DrugImporter> getPendingDrugImporters() throws ResourceNotFoundException {
-        List<User> pendingUsers = userRepository.findByAdminApproval(AccessControl.PENDING);
+        List<User> pendingUsers = Optional.ofNullable(userRepository.findByAdminApproval(AccessControl.PENDING))
+                .orElse(Collections.emptyList());
         if (pendingUsers.isEmpty()) {
             throw new ResourceNotFoundException("No pending users found");
         }
         List<DrugImporter> pendingDrugImporters = new ArrayList<>();
         for (User user : pendingUsers) {
-            DrugImporter drugImporter = drugImporterRepository.findByEmail(user.getEmail())
-                    .orElseThrow(() -> new ResourceNotFoundException("Drug importer not found with email: " + user.getEmail()));
-            pendingDrugImporters.add(drugImporter);
+            drugImporterRepository.findByEmail(user.getEmail()).ifPresent(pendingDrugImporters::add);
+        }
+        if (pendingDrugImporters.isEmpty()) {
+            throw new ResourceNotFoundException("No pending drug importers found");
         }
         return pendingDrugImporters;
     }
