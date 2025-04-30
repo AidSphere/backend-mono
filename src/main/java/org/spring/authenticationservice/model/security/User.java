@@ -1,12 +1,14 @@
 package org.spring.authenticationservice.model.security;
 
 import jakarta.persistence.*;
+import lombok.Data;
 
 import java.util.ArrayList;
 import java.util.List;
 
 
 @Entity
+@Data
 @Table(name = "users")
 public class User {
 
@@ -21,7 +23,11 @@ public class User {
     private String password;
 
     @Column(nullable = false)
-    private boolean isEnabled;
+    private boolean isEnabled = true;
+
+    @Column(nullable = false)
+    @Enumerated(EnumType.STRING)
+    private AccessControl adminApproval = AccessControl.PENDING;
 
     @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(

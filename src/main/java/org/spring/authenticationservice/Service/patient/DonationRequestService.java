@@ -112,7 +112,7 @@ public class DonationRequestService {
     public List<DonationRequestResponseDto> getAllDonationPatientRequests() {
         //need to get the donation request where status is PATIENT_APPROVED
         List<DonationRequest> donationRequests = donationRequestRepository
-                .findByStatus(StatusEnum.PATIENT_APPROVED);
+                .findByStatus(StatusEnum.PENDING);
         return donationRequests.stream()
                 .map(donationRequest -> {
                     DonationRequestResponseDto dto = new DonationRequestResponseDto();

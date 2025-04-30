@@ -7,10 +7,7 @@ import org.spring.authenticationservice.DTO.security.LoginUserDto;
 import org.spring.authenticationservice.DTO.security.RegisterUserDto;
 import org.spring.authenticationservice.model.donor.Donor;
 import org.spring.authenticationservice.model.patient.Patient;
-import org.spring.authenticationservice.model.security.Role;
-import org.spring.authenticationservice.model.security.TokenType;
-import org.spring.authenticationservice.model.security.User;
-import org.spring.authenticationservice.model.security.VerificationToken;
+import org.spring.authenticationservice.model.security.*;
 import org.spring.authenticationservice.repository.donor.DonorRepository;
 import org.spring.authenticationservice.repository.drugImporter.DrugImporterRepository;
 import org.spring.authenticationservice.repository.patient.PatientRepo;
@@ -62,19 +59,19 @@ public class AuthService {
         String activationToken = jwtService.generateActivationToken(user.getEmail());
         userRepository.save(user);
 
-        Map<String, String> emailBody = Map.of(
-                "to", user.getEmail(),
-                "name", user.getEmail(),  // If user has a getName() method, replace email with user.getName()
-                "activationLink", "localhost:8080/activate?token=" + activationToken
-        );
-
-        try{
-           String mailResponse = emailService.sendEmail("activation",emailBody);
-           System.out.println(mailResponse);
-       }
-       catch (Exception e) {
-           throw new Exception("Email could not be sent");
-       }
+//        Map<String, String> emailBody = Map.of(
+//                "to", user.getEmail(),
+//                "name", user.getEmail(),  // If user has a getName() method, replace email with user.getName()
+//                "activationLink", "localhost:8080/activate?token=" + activationToken
+//        );
+//
+//        try{
+//           String mailResponse = emailService.sendEmail("activation",emailBody);
+//           System.out.println(mailResponse);
+//       }
+//       catch (Exception e) {
+//           throw new Exception("Email could not be sent");
+//       }
     }
 
     public Boolean findUserByUsername(String email){
@@ -202,4 +199,39 @@ public class AuthService {
         }
     }
 
+    public void resetPassword(String email, String newPassword) {
+        User user = userRepository.findByEmail(email)
+                .orElseThrow(() -> new UsernameNotFoundException("User not found with email: " + email));
+
+        if (user != null) {
+            user.setPassword(encoder.encode(newPassword));
+            userRepository.save(user);
+        } else {
+            throw new UsernameNotFoundException("User not found with email: " + email);
+        }
+    }
+
+    public void adminApproval(String email) {
+        User user = userRepository.findByEmail(email)
+                .orElseThrow(() -> new UsernameNotFoundException("User not found with email: " + email));
+
+        if (user != null) {
+            user.setAdminApproval(AccessControl.APPROVED);
+            userRepository.save(user);
+        } else {
+            throw new UsernameNotFoundException("User not found with email: " + email);
+        }
+    }
+
+    public void adminApprovalReject(String email) {
+        User user = userRepository.findByEmail(email)
+                .orElseThrow(() -> new UsernameNotFoundException("User not found with email: " + email));
+
+        if (user != null) {
+            user.setAdminApproval(AccessControl.REJECTED);
+            userRepository.save(user);
+        } else {
+            throw new UsernameNotFoundException("User not found with email: " + email);
+        }
+    }
 }
