@@ -6,14 +6,13 @@ import org.spring.authenticationservice.DTO.donor.DonorResponseDTO;
 import org.spring.authenticationservice.DTO.drugImporter.DrugImporterResponse;
 import org.spring.authenticationservice.Service.donor.DonorService;
 import org.spring.authenticationservice.Service.drugImporter.DrugImporterService;
+import org.spring.authenticationservice.Service.security.AuthService;
 import org.spring.authenticationservice.exception.ResourceNotFoundException;
 import org.spring.authenticationservice.model.donor.Donor;
 import org.spring.authenticationservice.model.drugImporter.DrugImporter;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -26,6 +25,7 @@ public class AccessController {
 
     private DrugImporterService drugImporterService;
     private DonorService donorService;
+    private AuthService authService;
 
 
     //drug importer pending
@@ -73,9 +73,26 @@ public class AccessController {
     }
 
     //patient pending
+    @PostMapping("/access/approve/{email}")
+    public ResponseEntity<ApiResponse<?>> approveUser(@PathVariable String email) {
+        authService.adminApproval(email);
 
-    //any user approve
+        return ResponseEntity.ok(ApiResponse.builder()
+                .status(HttpStatus.OK.value())
+                .message("User approved successfully")
+                .timestamp(LocalDateTime.now())
+                .build());
+    }
 
-    //any user reject
+    @PostMapping("/access/reject/{email}")
+    public ResponseEntity<ApiResponse<?>> rejectUser(@PathVariable String email) {
+        authService.adminApprovalReject(email);
+
+        return ResponseEntity.ok(ApiResponse.builder()
+                .status(HttpStatus.OK.value())
+                .message("User rejected successfully")
+                .timestamp(LocalDateTime.now())
+                .build());
+    }
 
 }

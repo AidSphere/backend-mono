@@ -41,7 +41,6 @@ public class donorServiceImpl implements DonorService {
             throw new RuntimeException("User already exists with email: " + dto.getEmail());
         }
 
-        // Here you would typically save the donor to the database
         Donor donor = Donor.builder()
                 .firstName(dto.getFirstName())
                 .lastName(dto.getLastName())
@@ -58,8 +57,6 @@ public class donorServiceImpl implements DonorService {
         userDto.setPassword(dto.getPassword());
         userDto.setRoles("DONOR");
         authService.RegisterUser(userDto);
-
-
 
         return donorRepository.save(donor);
     }
