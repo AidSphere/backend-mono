@@ -190,7 +190,7 @@ public class DrugImporterServiceImpl implements DrugImporterService {
     public List<DrugImporter> getPendingDrugImporters() throws ResourceNotFoundException {
         List<User> pendingUsers = userRepository.findByAdminApproval(AccessControl.PENDING);
         if (pendingUsers.isEmpty()) {
-            throw new ResourceNotFoundException("No pending drug importers found");
+            throw new ResourceNotFoundException("No pending users found");
         }
         List<DrugImporter> pendingDrugImporters = new ArrayList<>();
         for (User user : pendingUsers) {
