@@ -131,7 +131,7 @@ public class DonationRequestService {
                         .build())
                 .toList();
 
-        String geminiApiKey = "AIzaSyDSZyFjp8vJ1b9LS2ktiHbo1qJopDIJNe0";
+        String geminiApiKey = "######";
         String geminiUrl = "https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-04-17:generateContent?key=" + geminiApiKey;
 
         String instruction = """
