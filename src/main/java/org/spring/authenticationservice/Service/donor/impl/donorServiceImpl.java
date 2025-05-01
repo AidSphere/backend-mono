@@ -55,7 +55,7 @@ public class donorServiceImpl implements DonorService {
         RegisterUserDto userDto = new RegisterUserDto();
         userDto.setEmail(dto.getEmail());
         userDto.setPassword(dto.getPassword());
-        userDto.setRoles("DONOR");
+        userDto.setRole("DONOR");
         authService.RegisterUser(userDto);
 
         return donorRepository.save(donor);
