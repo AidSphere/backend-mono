@@ -11,6 +11,4 @@ import java.util.List;
 @Repository
 public interface DonationRequestRepo extends JpaRepository<DonationRequest, Long> {
     List<DonationRequest> findByStatus(StatusEnum status);
-
-    List<DonationRequest> findAllByDonor(Donor donor);
 }
