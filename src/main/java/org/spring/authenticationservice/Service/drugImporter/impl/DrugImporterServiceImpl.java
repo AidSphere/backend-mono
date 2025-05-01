@@ -83,7 +83,7 @@ public class DrugImporterServiceImpl implements DrugImporterService {
         RegisterUserDto userDto = new RegisterUserDto();
         userDto.setEmail(request.getEmail());
         userDto.setPassword(request.getPassword());
-        userDto.setRoles("DRUG_IMPORTER");
+        userDto.setRole("DRUG_IMPORTER");
         authService.RegisterUser(userDto);
 
         log.info("Drug importer registered successfully with ID: {}", savedDrugImporter.getId());

@@ -3,6 +3,7 @@ package org.spring.authenticationservice.model.patient;
 import jakarta.persistence.*;
 import lombok.Data;
 import org.spring.authenticationservice.model.Enum.StatusEnum;
+import org.spring.authenticationservice.model.donor.Donation;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
@@ -56,6 +57,10 @@ public class DonationRequest {
 
     @Column(name="default_price")
     private BigDecimal defaultPrice;  // Default price for the prescribed items
+
+    @OneToMany(mappedBy = "donationRequest")
+    private List<Donation> donations;
+
 
     @ElementCollection
     @CollectionTable(name = "donation_request_images", joinColumns = @JoinColumn(name = "request_id"))
