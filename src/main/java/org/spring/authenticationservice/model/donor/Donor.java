@@ -34,6 +34,8 @@ public class Donor {
 
     private String address;
 
+    private String description;
+
     @OneToMany(mappedBy = "donor")
     private List<Donation> donations;
 
