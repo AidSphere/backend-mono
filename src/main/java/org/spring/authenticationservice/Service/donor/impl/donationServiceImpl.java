@@ -26,8 +26,8 @@ public class donationServiceImpl implements DonationService {
 
 
     @Override
-    public Donation createDonation(CreateDonationDTO createDonationDTO) {
-        DonationRequest donationRequest = donationRequestRepo.findById(createDonationDTO.getId()).orElseThrow(
+    public void createDonation(CreateDonationDTO createDonationDTO) {
+        DonationRequest donationRequest = donationRequestRepo.findById(createDonationDTO.getDonationRequestId()).orElseThrow(
                 () -> new RuntimeException("Donation request not found")
         );
 
@@ -36,14 +36,14 @@ public class donationServiceImpl implements DonationService {
         );
 
         Donation donation = Donation.builder()
-                .id(createDonationDTO.getId())
                 .donor(donor)
                 .donationRequest(donationRequest)
-                .donationStatus(createDonationDTO.getDonationStatus())
-                .donationDate(createDonationDTO.getDonationDate())
+                .donationMessage(createDonationDTO.getDonationMessage())
+                .donationMessageVisibility(createDonationDTO.getDonationMessageVisibility())
+                .donationStatus(createDonationDTO.isDonationStatus())
                 .donationAmount(createDonationDTO.getDonationAmount())
                 .build();
-        return donationRepo.save(donation);
+        donationRepo.save(donation);
     }
 
     @Override
