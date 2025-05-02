@@ -1,6 +1,7 @@
 package org.spring.authenticationservice.repository.patient;
 
 import org.spring.authenticationservice.model.Enum.StatusEnum;
+import org.spring.authenticationservice.model.donor.Donor;
 import org.spring.authenticationservice.model.patient.DonationRequest;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;

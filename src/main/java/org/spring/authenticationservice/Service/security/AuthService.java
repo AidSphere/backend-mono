@@ -7,6 +7,7 @@ import org.spring.authenticationservice.DTO.security.LoginUserDto;
 import org.spring.authenticationservice.DTO.security.RegisterUserDto;
 import org.spring.authenticationservice.exception.UserAlreadyExistedException;
 import org.spring.authenticationservice.model.donor.Donor;
+import org.spring.authenticationservice.model.drugImporter.DrugImporter;
 import org.spring.authenticationservice.model.patient.Patient;
 import org.spring.authenticationservice.model.security.*;
 import org.spring.authenticationservice.repository.donor.DonorRepository;
@@ -41,8 +42,6 @@ public class AuthService {
     private PatientRepo patientRepo;
     private DonorRepository donorRepository;
     private DrugImporterRepository drugImporterRepository;
-
-    @Autowired
     private VerificationTokenService verificationTokenService;
 
     public void RegisterUser(RegisterUserDto registerUserDto){
@@ -138,21 +137,51 @@ public class AuthService {
 
     public String authenticateUser(LoginUserDto loginUserDto) throws Exception {
         try {
-            Authentication authentication = authenticationManager.authenticate(
+            // Authenticate credentials
+            authenticationManager.authenticate(
                     new UsernamePasswordAuthenticationToken(loginUserDto.getEmail(), loginUserDto.getPassword())
             );
 
-            if (authentication.isAuthenticated()) {
-                User user = userRepository.findByEmail(loginUserDto.getEmail())
-                        .orElseThrow(() -> new UsernameNotFoundException("User not found"));
+            // Load user
+            User user = userRepository.findByEmail(loginUserDto.getEmail())
+                    .orElseThrow(() -> new UsernameNotFoundException("User not found"));
 
-                return jwtService.generateToken(user.getEmail(), user.getRoles());
-            }
+            // Check user status
+            if (!user.isEnabled()) throw new Exception("User is not activated");
+            if (user.getAdminApproval() == AccessControl.PENDING) throw new Exception("User is not approved by admin");
+            if (user.getAdminApproval() == AccessControl.REJECTED) throw new Exception("User is rejected by admin");
+
+            // Get first role (assuming one role per user for now)
+            String role = user.getRoles().stream()
+                    .findFirst()
+                    .map(Role::getName)
+                    .orElseThrow(() -> new Exception("User role not found"));
+
+            // Token generation based on role
+            return switch (role) {
+                case "PATIENT" -> {
+                    Patient patient = patientRepo.findByEmail(user.getEmail())
+                            .orElseThrow(() -> new UsernameNotFoundException("Patient not found with email: " + user.getEmail()));
+                    yield jwtService.generateToken(patient.getEmail(), user.getRoles());
+                }
+                case "DONOR" -> {
+                    Donor donor = donorRepository.findByEmail(user.getEmail())
+                            .orElseThrow(() -> new UsernameNotFoundException("Donor not found with email: " + user.getEmail()));
+                    yield jwtService.generateToken(donor.getEmail(), user.getRoles());
+                }
+                case "DRUG_IMPORTER" -> {
+                    DrugImporter drugImporter = drugImporterRepository.findByEmail(user.getEmail())
+                            .orElseThrow(() -> new UsernameNotFoundException("Drug Importer not found with email: " + user.getEmail()));
+                    yield jwtService.generateToken(drugImporter.getEmail(), user.getRoles());
+                }
+                default -> throw new Exception("Unauthorized role");
+            };
+
         } catch (BadCredentialsException e) {
             throw new Exception("Invalid email or password");
         }
-        throw new Exception("Authentication failed");
     }
+
 
 
 
