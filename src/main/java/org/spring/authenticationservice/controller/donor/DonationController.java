@@ -23,11 +23,10 @@ public class DonationController {
 
     //create donation request
     @PostMapping("payment")
-    public ResponseEntity<ApiResponse<?>> createDonationRequest(CreateDonationDTO createDonationDTO) {
-        Donation donation = donationService.createDonation(createDonationDTO);
+    public ResponseEntity<ApiResponse<?>> createDonationRequest(@RequestBody CreateDonationDTO createDonationDTO) {
+        donationService.createDonation(createDonationDTO);
         return ResponseEntity.ok(ApiResponse.builder()
-                .message("Donation Requests fetched successfully")
-                .data(donation)
+                .message("Donation Successfully")
                 .build());
     }
 
