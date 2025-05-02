@@ -8,31 +8,31 @@ import org.spring.authenticationservice.Service.security.AuthService;
 import org.spring.authenticationservice.Service.security.EmailService;
 import org.spring.authenticationservice.Service.security.JwtService;
 import org.spring.authenticationservice.exception.ResourceNotFoundException;
+import org.spring.authenticationservice.exception.UserAlreadyExistedException;
 import org.spring.authenticationservice.model.donor.Donor;
 import org.spring.authenticationservice.model.drugImporter.DrugImporter;
+import org.spring.authenticationservice.model.patient.Patient;
 import org.spring.authenticationservice.model.security.AccessControl;
 import org.spring.authenticationservice.model.security.Role;
 import org.spring.authenticationservice.model.security.User;
 import org.spring.authenticationservice.repository.donor.DonorRepository;
+import org.spring.authenticationservice.repository.patient.PatientRepo;
 import org.spring.authenticationservice.repository.security.RoleRepository;
 import org.spring.authenticationservice.repository.security.UserRepository;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
+
+import static org.springframework.data.repository.util.ClassUtils.ifPresent;
 
 @AllArgsConstructor
 @Service
 public class donorServiceImpl implements DonorService {
 
+    private  PatientRepo patientRepo;
     private UserRepository userRepository;
     private DonorRepository donorRepository;
-    private PasswordEncoder encoder;
-    private JwtService jwtService;
-    private RoleRepository roleRepository;
-    private EmailService emailService;
     private AuthService authService;
 
     @Override
@@ -51,7 +51,6 @@ public class donorServiceImpl implements DonorService {
                 .address(dto.getAddress())
                 .build();
 
-        //need to setup seperate function later
         RegisterUserDto userDto = new RegisterUserDto();
         userDto.setEmail(dto.getEmail());
         userDto.setPassword(dto.getPassword());
@@ -62,70 +61,58 @@ public class donorServiceImpl implements DonorService {
     }
 
     @Override
-    public Donor createDonorByAdmin(DonorRegDto dto) {
-        // Check if user already exists
-        if(userRepository.existsByEmail(dto.getEmail())) {
-            throw new RuntimeException("User already exists with email: " + dto.getEmail());
+    public Donor createDonorByAdmin(DonorRegDto dto){
+        // 1. Check if email already exists
+        if (userRepository.existsByEmail(dto.getEmail())) {
+            throw new UserAlreadyExistedException(dto.getEmail() + " already exists");
         }
 
-        // Create and save donor
-        Donor donor = Donor.builder()
-                .firstName(dto.getFirstName())
-                .lastName(dto.getLastName())
-                .email(dto.getEmail())
-                .phone(dto.getPhone())
-                .nic(dto.getNic())
-                .dob(dto.getDob())
-                .address(dto.getAddress())
-                .build();
-
-        donorRepository.save(donor);
-
-        // Generate default password: firstname@phone
-        String defaultPassword = dto.getFirstName() + "@" + dto.getPhone();
-
-        // Create new user
-        User user = new User();
-        user.setEmail(dto.getEmail());
-        user.setPassword(encoder.encode(defaultPassword)); // Hash the password
-        Role userRole = roleRepository.findByName("DONOR"); // or from dto if dynamic
-        user.getRoles().add(userRole);
-
-        String activationToken = jwtService.generateActivationToken(user.getEmail());
-        userRepository.save(user);
-
-        // Send activation email
-        Map<String, String> emailBody = Map.of(
-                "to", user.getEmail(),
-                "name", donor.getFirstName(), // use first name instead of email
-                "activationLink", "localhost:8080/activate?token=" + activationToken
+        // 2. Create and save donor entity
+        Donor donor = donorRepository.save(
+                Donor.builder()
+                        .firstName(dto.getFirstName())
+                        .lastName(dto.getLastName())
+                        .email(dto.getEmail())
+                        .phone(dto.getPhone())
+                        .nic(dto.getNic())
+                        .dob(dto.getDob())
+                        .address(dto.getAddress())
+                        .build()
         );
 
-        try {
-            String mailResponse = emailService.sendEmail("activation", emailBody);
-            System.out.println(mailResponse);
-        } catch (Exception e) {
-            throw new RuntimeException("Email could not be sent");
-        }
-
+        // 3. Register the donor as a user
+        RegisterUserDto userDto = new RegisterUserDto(
+                dto.getEmail(),
+                dto.getFirstName() + "@" + dto.getPhone(),  // Temp password logic
+                "DONOR"
+        );
+            authService.RegisterUser(userDto);
         return donor;
     }
 
-    @Override
-    public List<Donor> getPendingDonors() throws ResourceNotFoundException {
-        List<User> pendingUsers = userRepository.findByAdminApproval(AccessControl.PENDING);
-        if (pendingUsers.isEmpty()) {
-            throw new ResourceNotFoundException("No pending drug importers found");
-        }
-        List<Donor> pendingDonors = new ArrayList<>();
-        for (User user : pendingUsers) {
-            Donor donor = donorRepository.findByEmail(user.getEmail())
-                    .orElseThrow(() -> new ResourceNotFoundException("Drug importer not found with email: " + user.getEmail()));
-            pendingDonors.add(donor);
-        }
-        return pendingDonors;
 
+    @Override
+    public List<Patient> getPendingPatients() throws ResourceNotFoundException {
+        List<User> pendingUsers = Optional.ofNullable(userRepository.findByAdminApproval(AccessControl.PENDING))
+                .orElse(Collections.emptyList());
+
+        if (pendingUsers.isEmpty()) {
+            throw new ResourceNotFoundException("No pending users found");
+        }
+
+        List<Patient> pendingPatient = new ArrayList<>();
+        for (User user : pendingUsers) {
+            patientRepo.findByEmail(user.getEmail()).ifPresent(pendingPatient::add);
+        }
+
+        if (pendingPatient.isEmpty()) {
+            throw new ResourceNotFoundException("No pending donors found");
+        }
+
+        return pendingPatient;
     }
+
+
 
 
     @Override
