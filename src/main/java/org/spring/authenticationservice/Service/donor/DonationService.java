@@ -8,7 +8,7 @@ import org.spring.authenticationservice.model.patient.DonationRequest;
 import java.util.List;
 
 public interface DonationService {
-    Donation createDonation(CreateDonationDTO createDonationDTO);
+    void createDonation(CreateDonationDTO createDonationDTO);
 
     List<Donation> getAllDonationByUser();
 
