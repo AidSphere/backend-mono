@@ -7,6 +7,7 @@ import org.spring.authenticationservice.Service.donor.DonorService;
 import org.spring.authenticationservice.Service.security.AuthService;
 import org.spring.authenticationservice.Service.security.EmailService;
 import org.spring.authenticationservice.Service.security.JwtService;
+import org.spring.authenticationservice.Utils.SecurityUtil;
 import org.spring.authenticationservice.exception.ResourceNotFoundException;
 import org.spring.authenticationservice.exception.UserAlreadyExistedException;
 import org.spring.authenticationservice.model.donor.Donor;
@@ -30,6 +31,7 @@ import static org.springframework.data.repository.util.ClassUtils.ifPresent;
 @Service
 public class donorServiceImpl implements DonorService {
 
+    private  SecurityUtil securityUtil;
     private  PatientRepo patientRepo;
     private UserRepository userRepository;
     private DonorRepository donorRepository;
@@ -160,11 +162,15 @@ public class donorServiceImpl implements DonorService {
     }
 
     @Override
-    public DonorRegDto getDonorById(Long id) {
-        Donor donor = donorRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Donor not found with id: " + id));
+    public Donor getDonor() {
+        System.out.println(securityUtil.getUsername());
+        System.out.println(securityUtil.getUserId());
 
-        return DonorRegDto.builder()
+
+        Donor donor = donorRepository.findByEmail(securityUtil.getUsername())
+                .orElseThrow(() -> new RuntimeException("Donor not found with email: " + securityUtil.getUsername()));
+
+        return Donor.builder()
                 .firstName(donor.getFirstName())
                 .lastName(donor.getLastName())
                 .email(donor.getEmail())
@@ -172,6 +178,7 @@ public class donorServiceImpl implements DonorService {
                 .nic(donor.getNic())
                 .dob(donor.getDob())
                 .address(donor.getAddress())
+                .description(donor.getDescription())
                 .build();
     }
 }

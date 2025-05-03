@@ -15,7 +15,7 @@ public interface DonorService {
 
     boolean deleteDonor(Long id);
 
-    DonorRegDto getDonorById(Long id);
+    Donor getDonor();
 
     Donor createDonorByAdmin(DonorRegDto dto);
 
