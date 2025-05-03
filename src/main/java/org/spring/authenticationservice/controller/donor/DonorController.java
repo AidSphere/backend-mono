@@ -4,6 +4,7 @@ import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 import org.spring.authenticationservice.DTO.api.ApiResponse;
 import org.spring.authenticationservice.DTO.donor.DonorRegDto;
+import org.spring.authenticationservice.DTO.donor.DonorResponseDTO;
 import org.spring.authenticationservice.Service.donor.DonorService;
 import org.spring.authenticationservice.Utils.SecurityUtil;
 import org.spring.authenticationservice.model.donor.Donor;
@@ -36,10 +37,9 @@ public class DonorController {
     }
 
     //update donor profile
-    @PutMapping("/{id}")
-    public ResponseEntity<ApiResponse<?>> updateDonor(@Valid @RequestBody DonorRegDto dto,
-                                                      @PathVariable Long id) {
-        DonorRegDto updatedDonor = donorService.updateDonor(dto,id);
+    @PutMapping("")
+    public ResponseEntity<ApiResponse<?>> updateDonor(@Valid @RequestBody DonorResponseDTO dto) {
+        DonorResponseDTO updatedDonor = donorService.updateDonor(dto);
 
         return ResponseEntity.status(HttpStatus.OK)
                 .body(ApiResponse.builder()
