@@ -6,6 +6,8 @@ import lombok.RequiredArgsConstructor;
 import org.spring.authenticationservice.DTO.patient.PatientCreateDto;
 import org.spring.authenticationservice.DTO.patient.PatientResponseDto;
 import org.spring.authenticationservice.DTO.patient.PatientUpdateDto;
+import org.spring.authenticationservice.DTO.security.RegisterUserDto;
+import org.spring.authenticationservice.Service.security.AuthService;
 import org.spring.authenticationservice.Utils.FilterSpecification;
 import org.spring.authenticationservice.mapper.patient.PatientMapper;
 import org.spring.authenticationservice.model.patient.Patient;
@@ -27,6 +29,7 @@ public class PatientService {
     private final PatientRepo patientRepo;
     private final PatientVerificationRepo verificationRepo;
     private final PatientMapper mapper;
+    private final AuthService authService;
 
     @Transactional
     public Patient createPatient(PatientCreateDto dto) {
@@ -41,6 +44,14 @@ public class PatientService {
 
         // Set verification in patient
         savedPatient.setVerification(savedVerification);
+
+
+        RegisterUserDto registerUserDto = new RegisterUserDto();
+        registerUserDto.setEmail(dto.getEmail());
+        registerUserDto.setPassword(dto.getPassword());
+        registerUserDto.setRole("PATIENT");
+        authService.RegisterUser(registerUserDto);
+
         return patientRepo.save(savedPatient);
     }
 
