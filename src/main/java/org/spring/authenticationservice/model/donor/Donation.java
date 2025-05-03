@@ -42,4 +42,5 @@ public class Donation {
 
     private Double donationAmount;
 
+
 }
