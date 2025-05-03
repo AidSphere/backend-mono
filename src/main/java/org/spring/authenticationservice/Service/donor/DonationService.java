@@ -1,6 +1,7 @@
 package org.spring.authenticationservice.Service.donor;
 
 import org.spring.authenticationservice.DTO.donation.DonationForRequestDTO;
+import org.spring.authenticationservice.DTO.donation.DonationHistoryDto;
 import org.spring.authenticationservice.DTO.donation.DonationRequestResponseDto;
 import org.spring.authenticationservice.DTO.donor.CreateDonationDTO;
 import org.spring.authenticationservice.model.donor.Donation;
@@ -11,7 +12,7 @@ import java.util.List;
 public interface DonationService {
     void createDonation(CreateDonationDTO createDonationDTO);
 
-    List<Donation> getAllDonationByUser();
+    List<DonationHistoryDto> getAllDonationByUser();
 
     List<DonationForRequestDTO> getDonationByRequest(Long id);
 }

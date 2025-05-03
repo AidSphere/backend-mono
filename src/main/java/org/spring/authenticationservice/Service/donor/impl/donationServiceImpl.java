@@ -2,6 +2,7 @@ package org.spring.authenticationservice.Service.donor.impl;
 
 import lombok.AllArgsConstructor;
 import org.spring.authenticationservice.DTO.donation.DonationForRequestDTO;
+import org.spring.authenticationservice.DTO.donation.DonationHistoryDto;
 import org.spring.authenticationservice.DTO.donation.DonationRequestResponseDto;
 import org.spring.authenticationservice.DTO.donor.CreateDonationDTO;
 import org.spring.authenticationservice.Service.donor.DonationService;
@@ -48,20 +49,18 @@ public class donationServiceImpl implements DonationService {
     }
 
     @Override
-    public List<Donation> getAllDonationByUser() {
+    public List<DonationHistoryDto> getAllDonationByUser() {
         Donor donor = donorRepo.findByEmail(securityUtil.getUsername())
                 .orElseThrow(() -> new RuntimeException("Donor not found"));
 
         List<Donation> donations = donationRepo.findAllByDonor(donor);
 
         return donations.stream()
-                .map(donation -> Donation.builder()
+                .map(donation -> DonationHistoryDto.builder()
                         .id(donation.getId())
-                        .donationStatus(donation.getDonationStatus())
-                        .donationDate(donation.getDonationDate())
-                        .donationAmount(donation.getDonationAmount())
-                        .donationRequest(donation.getDonationRequest())
-                        .donor(donation.getDonor())
+                        .status(donation.getDonationStatus())
+                        .date(donation.getDonationDate())
+                        .amount(donation.getDonationAmount())
                         .build())
                 .collect(Collectors.toList());
     }
