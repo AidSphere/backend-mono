@@ -30,17 +30,13 @@ public interface DrugImporterService {
 
     List<DrugImporter> findAll();
 
-    DrugImporter registerDrugImporterByAdmin(DrugImporterRegisterRequest registerDto) throws Exception;
-
-    List<DrugImporter> getPendingDrugImporters() throws ResourceNotFoundException;
-
-//    DrugImporter updateDrugImporter(Long id,
-//                                    DrugImporterUpdateRequest updateDto) throws ResourceNotFoundException;
+    DrugImporter updateDrugImporter(Long id,
+                                    DrugImporterUpdateRequest updateDto) throws ResourceNotFoundException;
 
 
-//    void deleteDrugImporter(Long id) throws Exception;
+    void deleteDrugImporter(Long id) throws Exception;
 
-//    void activateDrugImporter(String token) throws Exception;
+    void activateDrugImporter(String token) throws Exception;
 }
 
 

@@ -3,12 +3,12 @@ package org.spring.authenticationservice.Service.drugImporter.impl;
 import jakarta.transaction.Transactional;
 import org.spring.authenticationservice.DTO.drugImporter.QuotationDTO;
 import org.spring.authenticationservice.DTO.drugImporter.QuotationMedicinePriceDTO;
+import org.spring.authenticationservice.DTO.drugImporter.QuotationStatusDTO;
 import org.spring.authenticationservice.Service.drugImporter.QuotationService;
 import org.spring.authenticationservice.Service.drugImporter.QuotationStatusService;
 import org.spring.authenticationservice.model.Enum.QuotationStatusEnum;
 import org.spring.authenticationservice.model.drugImporter.Quotation;
 import org.spring.authenticationservice.model.drugImporter.QuotationMedicinePrice;
-import org.spring.authenticationservice.model.drugImporter.QuotationStatus;
 import org.spring.authenticationservice.repository.drugImporter.QuotationMedicinePriceRepository;
 import org.spring.authenticationservice.repository.drugImporter.QuotationRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -56,7 +56,17 @@ public class QuotationServiceImpl implements QuotationService {
         medicinePriceRepository.saveAll(medicinePrices);
         savedQuotation.setMedicinePrices(medicinePrices);
 
-        return convertToDTO(savedQuotation);
+        // Create initial status for the quotation
+        QuotationStatusDTO statusDTO = new QuotationStatusDTO();
+        statusDTO.setRequestId(quotationDTO.getRequestId());
+        statusDTO.setDrugImporterId(quotationDTO.getDrugImporterId());
+        statusDTO.setStatus(QuotationStatusEnum.DRAFT);
+        QuotationStatusDTO savedStatus = quotationStatusService.createQuotationStatus(statusDTO);
+
+        QuotationDTO result = convertToDTO(savedQuotation);
+        result.setQuotationStatus(savedStatus);
+
+        return result;
     }
 
     @Override
@@ -87,7 +97,16 @@ public class QuotationServiceImpl implements QuotationService {
         medicinePriceRepository.saveAll(medicinePrices);
         quotation.setMedicinePrices(medicinePrices);
 
-        return convertToDTO(quotation);
+        // Update status to DRAFT if it was previously REJECTED
+        QuotationStatusDTO currentStatus = quotationStatusService.updateStatus(
+                quotation.getRequestId(),
+                quotationDTO.getDrugImporterId(),
+                QuotationStatusEnum.DRAFT);
+
+        QuotationDTO result = convertToDTO(quotation);
+        result.setQuotationStatus(currentStatus);
+
+        return result;
     }
 
     @Override
@@ -110,7 +129,18 @@ public class QuotationServiceImpl implements QuotationService {
             throw new RuntimeException("Quotation not found with id: " + id);
         }
 
-        return convertToDTO(quotation);
+        QuotationDTO quotationDTO = convertToDTO(quotation);
+
+        // Get the current status
+        QuotationStatusDTO statusDTO = quotationStatusService.updateStatus(
+                quotation.getRequestId(),
+                drugImporterId,
+                null // No status change, just retrieve current status
+        );
+
+        quotationDTO.setQuotationStatus(statusDTO);
+
+        return quotationDTO;
     }
 
     @Override
@@ -118,7 +148,19 @@ public class QuotationServiceImpl implements QuotationService {
         List<Quotation> quotations = quotationRepository.findByDrugImporterId(drugImporterId);
 
         return quotations.stream()
-                .map(this::convertToDTO)
+                .map(quotation -> {
+                    QuotationDTO dto = convertToDTO(quotation);
+
+                    // Get status for each quotation
+                    QuotationStatusDTO statusDTO = quotationStatusService.updateStatus(
+                            quotation.getRequestId(),
+                            drugImporterId,
+                            null // No status change, just retrieve current status
+                    );
+
+                    dto.setQuotationStatus(statusDTO);
+                    return dto;
+                })
                 .collect(Collectors.toList());
     }
 
@@ -131,11 +173,16 @@ public class QuotationServiceImpl implements QuotationService {
             throw new RuntimeException("Quotation not found with id: " + id);
         }
 
+        // Update quotation status to SENT
+        QuotationStatusDTO statusDTO = quotationStatusService.updateStatus(
+                quotation.getRequestId(),
+                drugImporterId,
+                QuotationStatusEnum.SENT);
 
-        // Update or create quotation status
-        quotationStatusService.updateStatus(quotation.getRequestId(), drugImporterId, QuotationStatusEnum.SENT);
+        QuotationDTO result = convertToDTO(quotation);
+        result.setQuotationStatus(statusDTO);
 
-        return convertToDTO(quotation);
+        return result;
     }
 
     private QuotationDTO convertToDTO(Quotation quotation) {

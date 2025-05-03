@@ -1,6 +1,5 @@
 package org.spring.authenticationservice.Service.drugImporter;
 
-
 import org.spring.authenticationservice.model.Enum.RequestStatusEnum;
 import org.spring.authenticationservice.model.drugImporter.RequestStatus;
 
@@ -10,6 +9,8 @@ import java.util.Optional;
 public interface RequestStatusService {
 
     RequestStatus save(RequestStatus requestStatus);
+
+    RequestStatus saveOrUpdateByRequestId(Long requestId, Long drugImporterId, RequestStatusEnum status);
 
     RequestStatus updateStatus(Long id, RequestStatusEnum status);
 

@@ -5,15 +5,17 @@ import lombok.RequiredArgsConstructor;
 import org.spring.authenticationservice.DTO.donation.DonationRequestResponseDto;
 import org.spring.authenticationservice.DTO.drugImporter.DrugImporterRequestDetailDto;
 import org.spring.authenticationservice.DTO.patient.PatientResponseDto;
-import org.spring.authenticationservice.Service.drugImporter.impl.RequestStatusServiceImpl;
 import org.spring.authenticationservice.Service.patient.DonationRequestService;
 import org.spring.authenticationservice.Service.patient.PatientService;
 import org.spring.authenticationservice.mapper.patient.PatientMapper;
+import org.spring.authenticationservice.model.Enum.RequestStatusEnum;
 import org.spring.authenticationservice.model.drugImporter.RequestStatus;
 import org.spring.authenticationservice.model.patient.Patient;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 /**
@@ -38,7 +40,7 @@ public class DrugImporterRequestService {
      */
     public List<DrugImporterRequestDetailDto> getAllDonationRequests(Long drugImporterId) {
         // Get all pending donation requests
-        List<DonationRequestResponseDto> pendingRequests = donationRequestService.getPendingDonationRequests();
+        List<DonationRequestResponseDto> pendingRequests = donationRequestService.getAllDonationRequests();
 
         // Convert to detailed DTOs with additional information
         return pendingRequests.stream()
@@ -50,13 +52,13 @@ public class DrugImporterRequestService {
      * Get a specific donation request with detailed information
      * including patient details and request status
      *
-     * @param requestId The ID of the donation request
+     * @param requestId      The ID of the donation request
      * @param drugImporterId The ID of the drug importer
      * @return Detailed donation request DTO
      */
     public DrugImporterRequestDetailDto getDonationRequestById(Long requestId, Long drugImporterId) {
         // Get all pending donation requests
-        List<DonationRequestResponseDto> allRequests = donationRequestService.getPendingDonationRequests();
+        List<DonationRequestResponseDto> allRequests = donationRequestService.getAllDonationRequests();
 
         // Find the specific request
         DonationRequestResponseDto request = allRequests.stream()
@@ -69,33 +71,24 @@ public class DrugImporterRequestService {
     }
 
     /**
-     * Convert a donation request to a detailed DTO with patient and status information
+     * Convert a donation request to a detailed DTO with patient and status
+     * information. If no status exists for this drug importer, create a PENDING
+     * status.
      *
-     * @param request The donation request DTO
+     * @param request        The donation request DTO
      * @param drugImporterId The ID of the drug importer
      * @return Detailed donation request DTO
      */
-    private DrugImporterRequestDetailDto convertToDrugImporterRequestDetail(
+    @Transactional
+    protected DrugImporterRequestDetailDto convertToDrugImporterRequestDetail(
             DonationRequestResponseDto request, Long drugImporterId) {
 
         // Get patient information
         Patient patient = patientService.getPatientById(request.getPatientId());
         PatientResponseDto patientDto = patientMapper.toResponseDto(patient);
 
-        // Get request status information - FIXED to handle multiple results
-        List<RequestStatus> requestStatuses =
-                requestStatusService.findByRequestId(request.getRequestId())
-                        .stream()
-                        .filter(status -> status.getDrugImporterId().equals(drugImporterId))
-                        .collect(Collectors.toList());
-
-        // Use the most recent status if there are multiple
-        RequestStatus currentStatus = null;
-        if (!requestStatuses.isEmpty()) {
-            // You might want to sort by creation date/ID if you have that field
-            // For now, we'll just take the first one
-            currentStatus = requestStatuses.get(0);
-        }
+        // Get request status or create a new PENDING status if none exists
+        RequestStatus currentStatus = getOrCreateRequestStatus(request.getRequestId(), drugImporterId);
 
         // Build the detailed DTO
         return DrugImporterRequestDetailDto.builder()
@@ -103,5 +96,33 @@ public class DrugImporterRequestService {
                 .patient(patientDto)
                 .requestStatus(currentStatus)
                 .build();
+    }
+
+    /**
+     * Get existing request status or create a new PENDING status if none exists
+     * 
+     * @param requestId      The request ID
+     * @param drugImporterId The drug importer ID
+     * @return The current or newly created request status
+     */
+    @Transactional
+    protected RequestStatus getOrCreateRequestStatus(Long requestId, Long drugImporterId) {
+        // Try to find existing status for this drug importer and request
+        Optional<RequestStatus> existingStatus = requestStatusService.findByRequestIdAndDrugImporterId(requestId,
+                drugImporterId);
+
+        // If status exists, return it
+        if (existingStatus.isPresent()) {
+            return existingStatus.get();
+        }
+
+        // Otherwise, create a new PENDING status
+        RequestStatus newStatus = new RequestStatus();
+        newStatus.setRequestId(requestId);
+        newStatus.setDrugImporterId(drugImporterId);
+        newStatus.setStatus(RequestStatusEnum.PENDING);
+
+        // Save and return the new status
+        return requestStatusService.save(newStatus);
     }
 }

@@ -1,5 +1,6 @@
 package org.spring.authenticationservice.Service.drugImporter.impl;
 
+import jakarta.transaction.Transactional;
 import org.spring.authenticationservice.DTO.drugImporter.QuotationStatusDTO;
 import org.spring.authenticationservice.Service.drugImporter.QuotationStatusService;
 import org.spring.authenticationservice.model.Enum.QuotationStatusEnum;
@@ -7,6 +8,7 @@ import org.spring.authenticationservice.model.drugImporter.QuotationStatus;
 import org.spring.authenticationservice.repository.drugImporter.QuotationStatusRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -18,6 +20,7 @@ public class QuotationStatusServiceImpl implements QuotationStatusService {
     private QuotationStatusRepository quotationStatusRepository;
 
     @Override
+    @Transactional
     public QuotationStatusDTO createQuotationStatus(QuotationStatusDTO quotationStatusDTO) {
         QuotationStatus quotationStatus = new QuotationStatus();
         quotationStatus.setRequestId(quotationStatusDTO.getRequestId());
@@ -25,11 +28,11 @@ public class QuotationStatusServiceImpl implements QuotationStatusService {
         quotationStatus.setStatus(quotationStatusDTO.getStatus());
 
         QuotationStatus savedStatus = quotationStatusRepository.save(quotationStatus);
-
         return convertToDTO(savedStatus);
     }
 
     @Override
+    @Transactional
     public QuotationStatusDTO updateQuotationStatus(Long id, QuotationStatusDTO quotationStatusDTO) {
         QuotationStatus quotationStatus = quotationStatusRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Quotation status not found with id: " + id));
@@ -38,7 +41,6 @@ public class QuotationStatusServiceImpl implements QuotationStatusService {
         quotationStatus.setUpdatedDate(LocalDateTime.now());
 
         QuotationStatus updatedStatus = quotationStatusRepository.save(quotationStatus);
-
         return convertToDTO(updatedStatus);
     }
 
@@ -60,37 +62,36 @@ public class QuotationStatusServiceImpl implements QuotationStatusService {
     }
 
     @Override
+    @Transactional
     public QuotationStatusDTO updateStatus(Long requestId, Long drugImporterId, QuotationStatusEnum status) {
-        QuotationStatus quotationStatus = quotationStatusRepository.findByRequestIdAndDrugImporterId(requestId, drugImporterId);
+        QuotationStatus quotationStatus = quotationStatusRepository.findByRequestIdAndDrugImporterId(requestId,
+                drugImporterId);
 
+        // If status doesn't exist, create a new one
         if (quotationStatus == null) {
-            // Create new status if it doesn't exist
             quotationStatus = new QuotationStatus();
             quotationStatus.setRequestId(requestId);
             quotationStatus.setDrugImporterId(drugImporterId);
+            quotationStatus.setStatus(status != null ? status : QuotationStatusEnum.DRAFT); // Default status
+        }
+        // If status exists and new status is provided, update it
+        else if (status != null) {
             quotationStatus.setStatus(status);
-        } else {
-            // Update existing status
-            quotationStatus.setStatus(status);
+            quotationStatus.setUpdatedDate(LocalDateTime.now());
         }
 
-        quotationStatus.setUpdatedDate(LocalDateTime.now());
-
         QuotationStatus savedStatus = quotationStatusRepository.save(quotationStatus);
-
         return convertToDTO(savedStatus);
     }
 
-    private QuotationStatusDTO convertToDTO(QuotationStatus quotationStatus) {
+    private QuotationStatusDTO convertToDTO(QuotationStatus status) {
         QuotationStatusDTO dto = new QuotationStatusDTO();
-        dto.setId(quotationStatus.getId());
-        dto.setRequestId(quotationStatus.getRequestId());
-        dto.setDrugImporterId(quotationStatus.getDrugImporterId());
-        dto.setStatus(quotationStatus.getStatus());
-        dto.setCreatedDate(quotationStatus.getCreatedDate());
-        dto.setUpdatedDate(quotationStatus.getUpdatedDate());
-
+        dto.setId(status.getId());
+        dto.setRequestId(status.getRequestId());
+        dto.setDrugImporterId(status.getDrugImporterId());
+        dto.setStatus(status.getStatus());
+        dto.setCreatedDate(status.getCreatedDate());
+        dto.setUpdatedDate(status.getUpdatedDate());
         return dto;
     }
 }
-

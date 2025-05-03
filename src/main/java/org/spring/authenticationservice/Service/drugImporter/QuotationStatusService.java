@@ -8,10 +8,13 @@ import java.util.List;
 
 public interface QuotationStatusService {
     QuotationStatusDTO createQuotationStatus(QuotationStatusDTO quotationStatusDTO);
+
     QuotationStatusDTO updateQuotationStatus(Long id, QuotationStatusDTO quotationStatusDTO);
+
     QuotationStatusDTO getQuotationStatusById(Long id);
+
     List<QuotationStatusDTO> getAllQuotationStatusesByDrugImporterId(Long drugImporterId);
-    QuotationStatusDTO updateStatus(Long requestId, Long drugImporterId, QuotationStatusEnum
-            status);
+
+    QuotationStatusDTO updateStatus(Long requestId, Long drugImporterId, QuotationStatusEnum status);
 
 }

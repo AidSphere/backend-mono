@@ -29,6 +29,27 @@ public class RequestStatusServiceImpl implements RequestStatusService {
 
     @Override
     @Transactional
+    public RequestStatus saveOrUpdateByRequestId(Long requestId, Long drugImporterId, RequestStatusEnum status) {
+        Optional<RequestStatus> existingStatus = requestStatusRepository.findByRequestIdAndDrugImporterId(requestId,
+                drugImporterId);
+
+        if (existingStatus.isPresent()) {
+            // Update existing record
+            RequestStatus statusToUpdate = existingStatus.get();
+            statusToUpdate.setStatus(status);
+            return requestStatusRepository.save(statusToUpdate);
+        } else {
+            // Create new record
+            RequestStatus newStatus = new RequestStatus();
+            newStatus.setRequestId(requestId);
+            newStatus.setDrugImporterId(drugImporterId);
+            newStatus.setStatus(status);
+            return requestStatusRepository.save(newStatus);
+        }
+    }
+
+    @Override
+    @Transactional
     public RequestStatus updateStatus(Long id, RequestStatusEnum status) {
         RequestStatus requestStatus = requestStatusRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Request status not found with id: " + id));
