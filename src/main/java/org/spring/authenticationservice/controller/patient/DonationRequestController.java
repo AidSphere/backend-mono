@@ -35,7 +35,6 @@ public class DonationRequestController {
     }
 
 
-
     @PutMapping("/update/{requestId}")
     public ResponseEntity<ApiResponse<?>> updateDonationRequest(
             @PathVariable Long requestId,
@@ -58,6 +57,59 @@ public class DonationRequestController {
                 .timestamp(LocalDateTime.now())
                 .status(HttpStatus.OK.value())
                 .message("Donation Request Deleted Successfully")
+                .build());
+    }
+
+    @GetMapping
+    public ResponseEntity<ApiResponse<?>> getAllDonationRequests() {
+        List<DonationRequestResponseDto> requests = donationRequestService.getAllDonationRequests();
+        return ResponseEntity.ok(ApiResponse.builder()
+                .timestamp(LocalDateTime.now())
+                .status(HttpStatus.OK.value())
+                .message("Donation Requests Retrieved Successfully")
+                .data(requests)
+                .build());
+    }
+
+    // get donation requests of a patient (only REJECTED, PENDING, ADMIN_APPROVED)
+    @GetMapping("/patient/{patientId}")
+    public ResponseEntity<ApiResponse<?>> getDonationRequestsByPatient(@PathVariable Long patientId) {
+        List<DonationRequestResponseDto> requests = donationRequestService.getDonationRequestsByPatientIdAndStatus(patientId);
+
+        return ResponseEntity.ok(ApiResponse.builder()
+                .timestamp(LocalDateTime.now())
+                .status(HttpStatus.OK.value())
+                .message("Patient's Donation Requests Retrieved Successfully")
+                .data(requests)
+                .build());
+    }
+
+    // get donation requests of a patient (only ADMIN_APPROVED)
+    @GetMapping("/patient/{patientId}/patient-approved")
+    public ResponseEntity<ApiResponse<?>> getPatientApprovedRequestsByPatient(@PathVariable Long patientId) {
+        List<DonationRequestResponseDto> requests = donationRequestService.getPatientApprovedRequestsByPatientId(patientId);
+
+        return ResponseEntity.ok(ApiResponse.builder()
+                .timestamp(LocalDateTime.now())
+                .status(HttpStatus.OK.value())
+                .message("Patient's Approved Donation Requests Retrieved Successfully")
+                .data(requests)
+                .build());
+    }
+
+
+
+    //admin approved
+    @GetMapping("/approved")
+    public ResponseEntity<ApiResponse<?>> getApprovedDonations() {
+        List<DonationRequestResponseDto> approvedRequests =
+                donationRequestService.getApprovedDonationRequests();
+
+        return ResponseEntity.ok(ApiResponse.builder()
+                .timestamp(LocalDateTime.now())
+                .status(HttpStatus.OK.value())
+                .message("Approved Donation Requests Retrieved Successfully")
+                .data(approvedRequests)
                 .build());
     }
 

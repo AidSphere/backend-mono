@@ -12,4 +12,5 @@ import lombok.NoArgsConstructor;
 public class PrescribedMedicine {
     private String medicine;
     private Double amount;
+    private String unit;
 }
