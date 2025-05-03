@@ -10,7 +10,6 @@ import org.spring.authenticationservice.Service.donor.DonorService;
 import org.spring.authenticationservice.Service.drugImporter.DrugImporterService;
 import org.spring.authenticationservice.Service.patient.PatientService;
 import org.spring.authenticationservice.Service.security.AuthService;
-import org.spring.authenticationservice.controller.drugImporter.DrugImporterController;
 import org.spring.authenticationservice.mapper.patient.PatientMapper;
 import org.spring.authenticationservice.model.donor.Donor;
 import org.spring.authenticationservice.model.security.ResetPasswordRequest;
@@ -27,6 +26,7 @@ import static org.spring.authenticationservice.controller.drugImporter.DrugImpor
 
 @RestController
 @RequestMapping("/admin")
+@CrossOrigin(origins = "*")
 @AllArgsConstructor
 public class AccountController {
 
@@ -54,7 +54,7 @@ public class AccountController {
 
     //create donor
     @PostMapping("/createDonor")
-    public ResponseEntity<ApiResponse<?>> createDonor(@Valid @RequestBody DonorRegDto dto) {
+    public ResponseEntity<ApiResponse<?>> createDonor(@Valid @RequestBody DonorRegDto dto){
         Donor createdDonor = donorService.createDonorByAdmin(dto);
 
         return ResponseEntity.status(HttpStatus.CREATED)

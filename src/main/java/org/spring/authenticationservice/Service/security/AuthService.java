@@ -5,6 +5,7 @@ import lombok.AllArgsConstructor;
 import org.spring.authenticationservice.DTO.patient.PatientResponseDto;
 import org.spring.authenticationservice.DTO.security.LoginUserDto;
 import org.spring.authenticationservice.DTO.security.RegisterUserDto;
+import org.spring.authenticationservice.exception.UserAlreadyExistedException;
 import org.spring.authenticationservice.model.donor.Donor;
 import org.spring.authenticationservice.model.drugImporter.DrugImporter;
 import org.spring.authenticationservice.model.patient.Patient;
@@ -43,7 +44,7 @@ public class AuthService {
     private DrugImporterRepository drugImporterRepository;
     private VerificationTokenService verificationTokenService;
 
-    public void RegisterUser(RegisterUserDto registerUserDto) throws Exception {
+    public void RegisterUser(RegisterUserDto registerUserDto){
         User user = new User();
         user.setEmail(registerUserDto.getEmail());
         user.setPassword(encoder.encode(registerUserDto.getPassword()));
@@ -52,8 +53,9 @@ public class AuthService {
         user.getRoles().add(userRole);
 
         if (findUserByUsername(user.getEmail())) {
-            throw new Exception(user.getEmail()+" already exists");
+            throw new UserAlreadyExistedException(user.getEmail() + " already exists");
         }
+
 
         String activationToken = jwtService.generateActivationToken(user.getEmail());
         userRepository.save(user);

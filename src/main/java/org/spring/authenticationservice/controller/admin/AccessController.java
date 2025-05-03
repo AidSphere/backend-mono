@@ -4,12 +4,14 @@ import lombok.AllArgsConstructor;
 import org.spring.authenticationservice.DTO.api.ApiResponse;
 import org.spring.authenticationservice.DTO.donor.DonorResponseDTO;
 import org.spring.authenticationservice.DTO.drugImporter.DrugImporterResponse;
+import org.spring.authenticationservice.DTO.patient.PatientResponseDto;
 import org.spring.authenticationservice.Service.donor.DonorService;
 import org.spring.authenticationservice.Service.drugImporter.DrugImporterService;
 import org.spring.authenticationservice.Service.security.AuthService;
 import org.spring.authenticationservice.exception.ResourceNotFoundException;
 import org.spring.authenticationservice.model.donor.Donor;
 import org.spring.authenticationservice.model.drugImporter.DrugImporter;
+import org.spring.authenticationservice.model.patient.Patient;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -17,6 +19,7 @@ import org.springframework.web.bind.annotation.*;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
+
 
 @RestController
 @RequestMapping("admin")
@@ -50,24 +53,27 @@ public class AccessController {
     }
 
     //donor pending
-    @GetMapping("/access/donor/pending")
-    public ResponseEntity<ApiResponse<List<DonorResponseDTO>>> getPendingDonors() throws ResourceNotFoundException {
-        List<Donor> pendingDonors = donorService.getPendingDonors();
-        List<DonorResponseDTO> donorResponses = pendingDonors.stream()
-                .map(donor -> new DonorResponseDTO(
-                        donor.getId(),
-                        donor.getFirstName(),
-                        donor.getLastName(),
-                        donor.getEmail(),
-                        donor.getPhone(),
-                        donor.getNic()
+    @GetMapping("/access/patient/pending")
+    public ResponseEntity<ApiResponse<List<PatientResponseDto>>> getPendingDonors() throws ResourceNotFoundException {
+        List<Patient> pendingDonors = donorService.getPendingPatients();
+        List<PatientResponseDto> patientResponseDtos = pendingDonors.stream()
+                .map(patient -> PatientResponseDto.builder()
+                        .patientId(patient.getPatientId())
+                        .firstName(patient.getFirstName())
+                        .lastName(patient.getLastName())
+                        .email(patient.getEmail())
+                        .phoneNumber(patient.getPhoneNumber())
+                        .permanentAddress(patient.getPermanentAddress())
+                        .currentAddress(patient.getCurrentAddress())
+                        .profileImageUrl(patient.getProfileImageUrl())
+                        .build(
                 ))
                 .collect(Collectors.toList());
 
-        return ResponseEntity.ok(ApiResponse.<List<DonorResponseDTO>>builder()
+        return ResponseEntity.ok(ApiResponse.<List<PatientResponseDto>>builder()
                 .status(HttpStatus.OK.value())
                 .message("Pending donors retrieved successfully")
-                .data(donorResponses)
+                .data(patientResponseDtos)
                 .timestamp(LocalDateTime.now())
                 .build());
     }
