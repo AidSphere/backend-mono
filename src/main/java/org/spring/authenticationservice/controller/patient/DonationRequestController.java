@@ -12,6 +12,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -161,6 +162,32 @@ public class DonationRequestController {
                 .status(HttpStatus.OK.value())
                 .message("Patient Accepted Donation Requests Retrieved Successfully")
                 .data(acceptedRequests)
+                .build());
+    }
+
+    @GetMapping("/quotation-issued")
+    public ResponseEntity<ApiResponse<?>> getQuotationIssuedRequests() {
+        List<DonationRequestResponseDto> requests = donationRequestService.getQuotationIssuedRequests();
+
+        return ResponseEntity.ok(ApiResponse.builder()
+                .timestamp(LocalDateTime.now())
+                .status(HttpStatus.OK.value())
+                .message("Quotation Issued Requests Retrieved Successfully")
+                .data(requests)
+                .build());
+    }
+
+    @PutMapping("/{requestId}/default-price")
+    public ResponseEntity<ApiResponse<?>> updateDonationRequestDefaultPrice(
+            @PathVariable Long requestId,
+            @RequestBody BigDecimal defaultPrice) {
+        DonationRequestResponseDto responseDto = donationRequestService.updateDefaultPrice(requestId, defaultPrice);
+
+        return ResponseEntity.ok(ApiResponse.builder()
+                .timestamp(LocalDateTime.now())
+                .status(HttpStatus.OK.value())
+                .message("Donation Request Default Price Updated Successfully")
+                .data(responseDto)
                 .build());
     }
 
