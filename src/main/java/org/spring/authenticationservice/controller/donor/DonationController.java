@@ -3,6 +3,7 @@ package org.spring.authenticationservice.controller.donor;
 import lombok.AllArgsConstructor;
 import org.spring.authenticationservice.DTO.api.ApiResponse;
 import org.spring.authenticationservice.DTO.donation.DonationForRequestDTO;
+import org.spring.authenticationservice.DTO.donation.DonationHistoryDto;
 import org.spring.authenticationservice.DTO.donation.DonationRequestResponseDto;
 import org.spring.authenticationservice.DTO.donor.CreateDonationDTO;
 import org.spring.authenticationservice.Service.donor.DonationService;
@@ -35,7 +36,7 @@ public class DonationController {
     @GetMapping("/donationByUser")
     public ResponseEntity<ApiResponse<?>> getDonationByUser() {
         //use donation requests as a list
-        List<Donation> donationRequests = donationService.getAllDonationByUser();
+        List<DonationHistoryDto> donationRequests = donationService.getAllDonationByUser();
         return ResponseEntity.ok(ApiResponse.builder()
                 .message("Donation Requests fetched successfully")
                 .data(donationRequests)

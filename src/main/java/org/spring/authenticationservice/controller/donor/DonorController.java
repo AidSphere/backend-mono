@@ -5,6 +5,7 @@ import lombok.AllArgsConstructor;
 import org.spring.authenticationservice.DTO.api.ApiResponse;
 import org.spring.authenticationservice.DTO.donor.DonorRegDto;
 import org.spring.authenticationservice.Service.donor.DonorService;
+import org.spring.authenticationservice.Utils.SecurityUtil;
 import org.spring.authenticationservice.model.donor.Donor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -18,6 +19,7 @@ import java.time.LocalDateTime;
 public class DonorController {
 
     private final DonorService donorService;
+    private final SecurityUtil securityUtil;
 
     //create donor
     @PostMapping("")
@@ -73,9 +75,10 @@ public class DonorController {
     }
 
     //get donor profile
-    @GetMapping("/{id}")
-    public ResponseEntity<ApiResponse<?>> getDonor(@PathVariable Long id) {
-        DonorRegDto donor = donorService.getDonorById(id);
+    @GetMapping("")
+    public ResponseEntity<ApiResponse<?>> getDonor() {
+        System.out.println(securityUtil.getUsername());
+        Donor donor = donorService.getDonor();
 
         return ResponseEntity.status(HttpStatus.OK)
                 .body(ApiResponse.builder()
