@@ -22,6 +22,7 @@ public class DonationRequestMapperMannual {
         dto.setAdminId(donationRequest.getAdminId());
         dto.setAdminApprovedAt(donationRequest.getAdminApprovedAt());
         dto.setDefaultPrice(donationRequest.getDefaultPrice());
+        dto.setRemainingPrice(donationRequest.getRemainingPrice());
         dto.setImages(donationRequest.getImages());
         dto.setDocuments(donationRequest.getDocuments());
         dto.setPrescribedMedicines(donationRequest.getPrescribedMedicines());

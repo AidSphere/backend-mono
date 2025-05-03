@@ -1,6 +1,7 @@
 package org.spring.authenticationservice.Service.donor;
 
 import org.spring.authenticationservice.DTO.donor.DonorRegDto;
+import org.spring.authenticationservice.DTO.donor.DonorResponseDTO;
 import org.spring.authenticationservice.exception.ResourceNotFoundException;
 import org.spring.authenticationservice.model.donor.Donor;
 import org.spring.authenticationservice.model.patient.Patient;
@@ -11,11 +12,11 @@ public interface DonorService {
 
     Donor createDonor(DonorRegDto dto) throws Exception;
 
-    DonorRegDto updateDonor(DonorRegDto dto, Long id);
+    DonorResponseDTO updateDonor(DonorResponseDTO dto);
 
     boolean deleteDonor(Long id);
 
-    DonorRegDto getDonorById(Long id);
+    Donor getDonor();
 
     Donor createDonorByAdmin(DonorRegDto dto);
 

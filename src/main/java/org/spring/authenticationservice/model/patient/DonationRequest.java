@@ -58,6 +58,9 @@ public class DonationRequest {
     @Column(name="default_price")
     private BigDecimal defaultPrice;  // Default price for the prescribed items
 
+    @Column(name="remain_amount")
+    private BigDecimal remainingPrice; // Remaining price after some items are donated
+
     @OneToMany(mappedBy = "donationRequest")
     private List<Donation> donations;
 
