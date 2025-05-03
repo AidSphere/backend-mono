@@ -36,6 +36,9 @@ public class Quotation {
     @OneToMany(mappedBy = "quotation", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<QuotationMedicinePrice> medicinePrices;
 
+    @Column(name = "status")
+    private String status = "PENDING";
+
     @PrePersist
     protected void onCreate() {
         this.createdDate = LocalDateTime.now();
