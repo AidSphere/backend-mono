@@ -18,6 +18,7 @@ import java.time.LocalDateTime;
 public class Donation {
 
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @ManyToOne
@@ -28,10 +29,18 @@ public class Donation {
     @JoinColumn(name = "donation_request_id", nullable = false)
     private DonationRequest donationRequest;
 
-    private String donationStatus;
+    @Column(name = "donation_message")
+    private String donationMessage;
 
-    private LocalDateTime donationDate;
+    @Column(name = "donation_message_visibility")
+    private Boolean donationMessageVisibility;
+
+
+    private Boolean donationStatus = true;
+
+    private LocalDateTime donationDate = LocalDateTime.now();
 
     private Double donationAmount;
+
 
 }

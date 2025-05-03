@@ -1,6 +1,8 @@
 package org.spring.authenticationservice.Service.donor.impl;
 
 import lombok.AllArgsConstructor;
+import org.spring.authenticationservice.DTO.donation.DonationForRequestDTO;
+import org.spring.authenticationservice.DTO.donation.DonationHistoryDto;
 import org.spring.authenticationservice.DTO.donation.DonationRequestResponseDto;
 import org.spring.authenticationservice.DTO.donor.CreateDonationDTO;
 import org.spring.authenticationservice.Service.donor.DonationService;
@@ -26,8 +28,8 @@ public class donationServiceImpl implements DonationService {
 
 
     @Override
-    public Donation createDonation(CreateDonationDTO createDonationDTO) {
-        DonationRequest donationRequest = donationRequestRepo.findById(createDonationDTO.getId()).orElseThrow(
+    public void createDonation(CreateDonationDTO createDonationDTO) {
+        DonationRequest donationRequest = donationRequestRepo.findById(createDonationDTO.getDonationRequestId()).orElseThrow(
                 () -> new RuntimeException("Donation request not found")
         );
 
@@ -36,51 +38,51 @@ public class donationServiceImpl implements DonationService {
         );
 
         Donation donation = Donation.builder()
-                .id(createDonationDTO.getId())
                 .donor(donor)
                 .donationRequest(donationRequest)
-                .donationStatus(createDonationDTO.getDonationStatus())
-                .donationDate(createDonationDTO.getDonationDate())
+                .donationMessage(createDonationDTO.getDonationMessage())
+                .donationMessageVisibility(createDonationDTO.getDonationMessageVisibility())
+                .donationStatus(createDonationDTO.isDonationStatus())
                 .donationAmount(createDonationDTO.getDonationAmount())
                 .build();
-        return donationRepo.save(donation);
+        donationRepo.save(donation);
     }
 
     @Override
-    public List<Donation> getAllDonationByUser() {
+    public List<DonationHistoryDto> getAllDonationByUser() {
         Donor donor = donorRepo.findByEmail(securityUtil.getUsername())
                 .orElseThrow(() -> new RuntimeException("Donor not found"));
 
         List<Donation> donations = donationRepo.findAllByDonor(donor);
 
         return donations.stream()
-                .map(donation -> Donation.builder()
+                .map(donation -> DonationHistoryDto.builder()
                         .id(donation.getId())
-                        .donationStatus(donation.getDonationStatus())
-                        .donationDate(donation.getDonationDate())
-                        .donationAmount(donation.getDonationAmount())
-                        .donationRequest(donation.getDonationRequest())
-                        .donor(donation.getDonor())
+                        .status(donation.getDonationStatus())
+                        .date(donation.getDonationDate())
+                        .amount(donation.getDonationAmount())
                         .build())
                 .collect(Collectors.toList());
     }
 
     @Override
-    public List<Donation> getDonationById(Long id) {
-        Donation donation = donationRepo.findById(id)
-                .orElseThrow(() -> new RuntimeException("Donation not found"));
+    public List<DonationForRequestDTO> getDonationByRequest(Long id) {
+        DonationRequest donationRequest = donationRequestRepo.findById(id)
+                .orElseThrow(() -> new RuntimeException("Donation request not found"));
 
-        Donation result = Donation.builder()
-                .id(donation.getId())
-                .donationStatus(donation.getDonationStatus())
-                .donationDate(donation.getDonationDate())
-                .donationAmount(donation.getDonationAmount())
-                .donationRequest(donation.getDonationRequest())
-                .donor(donation.getDonor())
-                .build();
+        List<Donation> donations = donationRepo.findAllByDonationRequest(donationRequest);
 
-        return List.of(result);
+        return donations.stream()
+                .map(donation -> DonationForRequestDTO.builder()
+                        .donationRequestTitle(donation.getDonationRequest().getTitle())
+                        .donationMessage(donation.getDonationMessage())
+                        .donationDate(donation.getDonationDate())
+                        .donatedAmount(donation.getDonationAmount())
+                        .donorName(donation.getDonor().getFirstName() + " " + donation.getDonor().getLastName())
+                        .build())
+                .toList();
     }
+
 
 }
 
