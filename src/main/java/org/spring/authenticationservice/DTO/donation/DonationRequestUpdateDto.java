@@ -33,7 +33,6 @@ public class DonationRequestUpdateDto {
     @Future(message = "Expected date must be in the future")
     private LocalDate expectedDate;
 
-    @NotBlank(message = "Hospital name is required")
     @Size(min = 2, max = 100, message = "Hospital name must be between 2 and 100 characters")
     private String hospitalName;
 

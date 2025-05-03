@@ -106,6 +106,15 @@ public class DonationRequestService {
     }
 
     @Transactional(readOnly = true)
+    public DonationRequestResponseDto getDonationRequestById(Long requestId) {
+        DonationRequest request = donationRequestRepository.findById(requestId)
+                .orElseThrow(() -> new RuntimeException("Donation request not found with id: " + requestId));
+
+        DonationRequestResponseDto responseDto = new DonationRequestResponseDto();
+        return DonationRequestMapperMannual.toDonationResponseDto(request, responseDto);
+    }
+
+    @Transactional(readOnly = true)
     public List<DonationRequestResponseDto> getAllDonationRequests() {
         List<DonationRequest> requests = donationRequestRepository.findAll();
         return requests.stream()

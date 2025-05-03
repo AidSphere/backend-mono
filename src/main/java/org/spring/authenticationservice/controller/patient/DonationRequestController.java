@@ -35,7 +35,7 @@ public class DonationRequestController {
     }
 
 
-    @PutMapping("/update/{requestId}")
+    @PutMapping("/{requestId}")
     public ResponseEntity<ApiResponse<?>> updateDonationRequest(
             @PathVariable Long requestId,
             @Valid @RequestBody DonationRequestUpdateDto dto) {
@@ -68,6 +68,17 @@ public class DonationRequestController {
                 .status(HttpStatus.OK.value())
                 .message("Donation Requests Retrieved Successfully")
                 .data(requests)
+                .build());
+    }
+
+    @GetMapping("/{requestId}")
+    public ResponseEntity<ApiResponse<?>> getDonationRequestById(@PathVariable Long requestId) {
+        var responseDto = donationRequestService.getDonationRequestById(requestId);
+        return ResponseEntity.ok(ApiResponse.builder()
+                .timestamp(LocalDateTime.now())
+                .status(HttpStatus.OK.value())
+                .message("Donation Request Retrieved Successfully")
+                .data(responseDto)
                 .build());
     }
 

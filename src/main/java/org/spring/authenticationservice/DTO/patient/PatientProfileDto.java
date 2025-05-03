@@ -3,10 +3,9 @@ package org.spring.authenticationservice.DTO.patient;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.Data;
 
-// Data transfer object for sending the patient as response
 @Data
 @JsonInclude(JsonInclude.Include.NON_NULL)
-public class PatientResponseDto {
+public class PatientProfileDto {
     private Long patientId;
     private String firstName;
     private String lastName;
