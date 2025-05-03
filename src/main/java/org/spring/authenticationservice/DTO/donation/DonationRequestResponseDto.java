@@ -35,6 +35,7 @@ public class DonationRequestResponseDto {
     private Long adminId;
     private LocalDateTime adminApprovedAt;
     private BigDecimal defaultPrice;
+    private BigDecimal remainingPrice;
     private List<String> images;
     private List<String> documents;
     private List<PrescribedMedicine> prescribedMedicines;
