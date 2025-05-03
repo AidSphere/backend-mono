@@ -2,6 +2,7 @@ package org.spring.authenticationservice.Service.donor.impl;
 
 import lombok.AllArgsConstructor;
 import org.spring.authenticationservice.DTO.donor.DonorRegDto;
+import org.spring.authenticationservice.DTO.donor.DonorResponseDTO;
 import org.spring.authenticationservice.DTO.security.RegisterUserDto;
 import org.spring.authenticationservice.Service.donor.DonorService;
 import org.spring.authenticationservice.Service.security.AuthService;
@@ -118,10 +119,10 @@ public class donorServiceImpl implements DonorService {
 
 
     @Override
-    public DonorRegDto updateDonor(DonorRegDto dto, Long id) {
+    public DonorResponseDTO updateDonor(DonorResponseDTO dto) {
 
-        Donor donor = donorRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Donor not found with id: " + id));
+        Donor donor = donorRepository.findByEmail(securityUtil.getUsername())
+                .orElseThrow(() -> new RuntimeException("Donor not found with id: " + securityUtil.getUsername()));
 
         // Update the donor's details
         donor.setFirstName(dto.getFirstName());
@@ -131,13 +132,14 @@ public class donorServiceImpl implements DonorService {
         donor.setNic(dto.getNic());
         donor.setDob(dto.getDob());
         donor.setAddress(dto.getAddress());
+        donor.setDescription(dto.getDescription());
 
         // Save the updated donor
         Donor updatedDonor = donorRepository.save(donor);
 
         //update the users table as well
 
-        return DonorRegDto.builder()
+        return DonorResponseDTO.builder()
                 .firstName(updatedDonor.getFirstName())
                 .lastName(updatedDonor.getLastName())
                 .email(updatedDonor.getEmail())
@@ -145,6 +147,7 @@ public class donorServiceImpl implements DonorService {
                 .nic(updatedDonor.getNic())
                 .dob(updatedDonor.getDob())
                 .address(updatedDonor.getAddress())
+                .description(updatedDonor.getDescription())
                 .build();
     }
 
@@ -163,10 +166,6 @@ public class donorServiceImpl implements DonorService {
 
     @Override
     public Donor getDonor() {
-        System.out.println(securityUtil.getUsername());
-        System.out.println(securityUtil.getUserId());
-
-
         Donor donor = donorRepository.findByEmail(securityUtil.getUsername())
                 .orElseThrow(() -> new RuntimeException("Donor not found with email: " + securityUtil.getUsername()));
 
