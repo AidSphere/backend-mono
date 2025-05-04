@@ -6,6 +6,7 @@ import org.spring.authenticationservice.DTO.patient.PatientResponseDto;
 import org.spring.authenticationservice.DTO.security.LoginUserDto;
 import org.spring.authenticationservice.DTO.security.RegisterUserDto;
 import org.spring.authenticationservice.exception.UserAlreadyExistedException;
+import org.spring.authenticationservice.model.Admin;
 import org.spring.authenticationservice.model.donor.Donor;
 import org.spring.authenticationservice.model.drugImporter.DrugImporter;
 import org.spring.authenticationservice.model.patient.Patient;
@@ -13,6 +14,7 @@ import org.spring.authenticationservice.model.security.*;
 import org.spring.authenticationservice.repository.donor.DonorRepository;
 import org.spring.authenticationservice.repository.drugImporter.DrugImporterRepository;
 import org.spring.authenticationservice.repository.patient.PatientRepo;
+import org.spring.authenticationservice.repository.security.AdminRepository;
 import org.spring.authenticationservice.repository.security.RoleRepository;
 import org.spring.authenticationservice.repository.security.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -43,6 +45,7 @@ public class AuthService {
     private DonorRepository donorRepository;
     private DrugImporterRepository drugImporterRepository;
     private VerificationTokenService verificationTokenService;
+    private AdminRepository adminRepository;
 
     public void RegisterUser(RegisterUserDto registerUserDto){
         User user = new User();
@@ -173,6 +176,11 @@ public class AuthService {
                     DrugImporter drugImporter = drugImporterRepository.findByEmail(user.getEmail())
                             .orElseThrow(() -> new UsernameNotFoundException("Drug Importer not found with email: " + user.getEmail()));
                     yield jwtService.generateToken(drugImporter.getEmail(), user.getRoles());
+                }
+                case "ADMIN" -> {
+                    Admin admin = adminRepository.findByEmail(user.getEmail())
+                            .orElseThrow(() ->new UsernameNotFoundException("Admin Username not found"));
+                    yield jwtService.generateToken(admin.getEmail(), user.getRoles());
                 }
                 default -> throw new Exception("Unauthorized role");
             };
