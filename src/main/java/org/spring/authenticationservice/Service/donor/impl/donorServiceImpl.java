@@ -2,11 +2,13 @@ package org.spring.authenticationservice.Service.donor.impl;
 
 import lombok.AllArgsConstructor;
 import org.spring.authenticationservice.DTO.donor.DonorRegDto;
+import org.spring.authenticationservice.DTO.donor.DonorResponseDTO;
 import org.spring.authenticationservice.DTO.security.RegisterUserDto;
 import org.spring.authenticationservice.Service.donor.DonorService;
 import org.spring.authenticationservice.Service.security.AuthService;
 import org.spring.authenticationservice.Service.security.EmailService;
 import org.spring.authenticationservice.Service.security.JwtService;
+import org.spring.authenticationservice.Utils.SecurityUtil;
 import org.spring.authenticationservice.exception.ResourceNotFoundException;
 import org.spring.authenticationservice.exception.UserAlreadyExistedException;
 import org.spring.authenticationservice.model.donor.Donor;
@@ -30,6 +32,7 @@ import static org.springframework.data.repository.util.ClassUtils.ifPresent;
 @Service
 public class donorServiceImpl implements DonorService {
 
+    private  SecurityUtil securityUtil;
     private  PatientRepo patientRepo;
     private UserRepository userRepository;
     private DonorRepository donorRepository;
@@ -116,10 +119,10 @@ public class donorServiceImpl implements DonorService {
 
 
     @Override
-    public DonorRegDto updateDonor(DonorRegDto dto, Long id) {
+    public DonorResponseDTO updateDonor(DonorResponseDTO dto) {
 
-        Donor donor = donorRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Donor not found with id: " + id));
+        Donor donor = donorRepository.findByEmail(securityUtil.getUsername())
+                .orElseThrow(() -> new RuntimeException("Donor not found with id: " + securityUtil.getUsername()));
 
         // Update the donor's details
         donor.setFirstName(dto.getFirstName());
@@ -129,13 +132,14 @@ public class donorServiceImpl implements DonorService {
         donor.setNic(dto.getNic());
         donor.setDob(dto.getDob());
         donor.setAddress(dto.getAddress());
+        donor.setDescription(dto.getDescription());
 
         // Save the updated donor
         Donor updatedDonor = donorRepository.save(donor);
 
         //update the users table as well
 
-        return DonorRegDto.builder()
+        return DonorResponseDTO.builder()
                 .firstName(updatedDonor.getFirstName())
                 .lastName(updatedDonor.getLastName())
                 .email(updatedDonor.getEmail())
@@ -143,6 +147,7 @@ public class donorServiceImpl implements DonorService {
                 .nic(updatedDonor.getNic())
                 .dob(updatedDonor.getDob())
                 .address(updatedDonor.getAddress())
+                .description(updatedDonor.getDescription())
                 .build();
     }
 
@@ -160,11 +165,11 @@ public class donorServiceImpl implements DonorService {
     }
 
     @Override
-    public DonorRegDto getDonorById(Long id) {
-        Donor donor = donorRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Donor not found with id: " + id));
+    public Donor getDonor() {
+        Donor donor = donorRepository.findByEmail(securityUtil.getUsername())
+                .orElseThrow(() -> new RuntimeException("Donor not found with email: " + securityUtil.getUsername()));
 
-        return DonorRegDto.builder()
+        return Donor.builder()
                 .firstName(donor.getFirstName())
                 .lastName(donor.getLastName())
                 .email(donor.getEmail())
@@ -172,6 +177,7 @@ public class donorServiceImpl implements DonorService {
                 .nic(donor.getNic())
                 .dob(donor.getDob())
                 .address(donor.getAddress())
+                .description(donor.getDescription())
                 .build();
     }
 }

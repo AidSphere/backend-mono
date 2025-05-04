@@ -6,9 +6,9 @@ import java.time.LocalDateTime;
 
 @Data
 public class CreateDonationDTO {
-    private Long id;
     private Long donationRequestId;
-    private String donationStatus;
-    private LocalDateTime donationDate;
+    private boolean donationStatus;
     private Double donationAmount;
+    private String donationMessage;
+    private Boolean donationMessageVisibility;
 }

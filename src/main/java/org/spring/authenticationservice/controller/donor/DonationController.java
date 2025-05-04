@@ -2,6 +2,8 @@ package org.spring.authenticationservice.controller.donor;
 
 import lombok.AllArgsConstructor;
 import org.spring.authenticationservice.DTO.api.ApiResponse;
+import org.spring.authenticationservice.DTO.donation.DonationForRequestDTO;
+import org.spring.authenticationservice.DTO.donation.DonationHistoryDto;
 import org.spring.authenticationservice.DTO.donation.DonationRequestResponseDto;
 import org.spring.authenticationservice.DTO.donor.CreateDonationDTO;
 import org.spring.authenticationservice.Service.donor.DonationService;
@@ -23,11 +25,10 @@ public class DonationController {
 
     //create donation request
     @PostMapping("payment")
-    public ResponseEntity<ApiResponse<?>> createDonationRequest(CreateDonationDTO createDonationDTO) {
-        Donation donation = donationService.createDonation(createDonationDTO);
+    public ResponseEntity<ApiResponse<?>> createDonationRequest(@RequestBody CreateDonationDTO createDonationDTO) {
+        donationService.createDonation(createDonationDTO);
         return ResponseEntity.ok(ApiResponse.builder()
-                .message("Donation Requests fetched successfully")
-                .data(donation)
+                .message("Donation Successfully")
                 .build());
     }
 
@@ -35,7 +36,7 @@ public class DonationController {
     @GetMapping("/donationByUser")
     public ResponseEntity<ApiResponse<?>> getDonationByUser() {
         //use donation requests as a list
-        List<Donation> donationRequests = donationService.getAllDonationByUser();
+        List<DonationHistoryDto> donationRequests = donationService.getAllDonationByUser();
         return ResponseEntity.ok(ApiResponse.builder()
                 .message("Donation Requests fetched successfully")
                 .data(donationRequests)
@@ -45,7 +46,7 @@ public class DonationController {
     //get donation request by user
     @GetMapping("/{id}")
     public ResponseEntity<ApiResponse<?>> getDonationRequestByUser(@PathVariable Long id) {
-        List<Donation> donationRequests = donationService.getDonationById(id);
+        List<DonationForRequestDTO> donationRequests = donationService.getDonationByRequest(id);
         return ResponseEntity.ok(ApiResponse.builder()
                 .message("Donation Requests fetched successfully")
                 .data(donationRequests)
