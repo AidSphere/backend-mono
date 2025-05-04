@@ -4,6 +4,7 @@ package org.spring.authenticationservice.Service.patient;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.spring.authenticationservice.DTO.patient.PatientCreateDto;
+import org.spring.authenticationservice.DTO.patient.PatientProfileDto;
 import org.spring.authenticationservice.DTO.patient.PatientResponseDto;
 import org.spring.authenticationservice.DTO.patient.PatientUpdateDto;
 import org.spring.authenticationservice.DTO.security.RegisterUserDto;
@@ -60,6 +61,15 @@ public class PatientService {
                 .orElseThrow(() -> new EntityNotFoundException("Patient not found with id: " + id));
     }
 
+    @Transactional(readOnly = true)
+    public PatientProfileDto getPatientProfileById(Long id) {
+        Patient patient = patientRepo.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException("Patient not found with id: " + id));
+        if (patient.getMedicalRecord() != null) {
+            patient.getMedicalRecord().getRecordId(); // force initialization
+        }
+        return mapper.toProfileDto(patient);
+    }
     @Transactional
     public PatientResponseDto updatePatient(PatientUpdateDto patient, Long id) {
         Patient existingPatient = getPatientById(id);

@@ -8,7 +8,6 @@ import org.spring.authenticationservice.Service.drugImporter.QuotationStatusServ
 import org.spring.authenticationservice.model.Enum.QuotationStatusEnum;
 import org.spring.authenticationservice.model.drugImporter.Quotation;
 import org.spring.authenticationservice.model.drugImporter.QuotationMedicinePrice;
-import org.spring.authenticationservice.model.drugImporter.QuotationStatus;
 import org.spring.authenticationservice.repository.drugImporter.QuotationMedicinePriceRepository;
 import org.spring.authenticationservice.repository.drugImporter.QuotationRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -123,6 +122,25 @@ public class QuotationServiceImpl implements QuotationService {
     }
 
     @Override
+    public List<QuotationDTO> getAllQuotationsByRequestId(Long requestId) {
+        List<Quotation> quotations = quotationRepository.findByRequestId(requestId);
+
+        return quotations.stream()
+                .map(this::convertToDTO)
+                .collect(Collectors.toList());
+    }
+
+    @Override
+    @Transactional
+    public void rejectPendingQuotationsByRequestId(Long requestId) {
+        List<Quotation> pendingQuotations = quotationRepository.findByRequestIdAndStatus(requestId, "PENDING");
+        for (Quotation quotation : pendingQuotations) {
+            quotation.setStatus("REJECTED");
+            quotationRepository.save(quotation);
+        }
+    }
+
+    @Override
     @Transactional
     public QuotationDTO sendQuotation(Long id, Long drugImporterId) {
         Quotation quotation = quotationRepository.findByIdAndDrugImporterId(id, drugImporterId);
@@ -146,6 +164,7 @@ public class QuotationServiceImpl implements QuotationService {
         dto.setDiscount(quotation.getDiscount());
         dto.setCreatedDate(quotation.getCreatedDate());
         dto.setUpdatedDate(quotation.getUpdatedDate());
+        dto.setStatus(quotation.getStatus());
 
         List<QuotationMedicinePriceDTO> medicinePriceDTOs = quotation.getMedicinePrices().stream()
                 .map(medicinePrice -> {

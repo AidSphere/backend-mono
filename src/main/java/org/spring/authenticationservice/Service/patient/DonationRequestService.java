@@ -1,6 +1,5 @@
 package org.spring.authenticationservice.Service.patient;
 
-import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
@@ -30,7 +29,6 @@ import java.net.http.HttpResponse;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Map;
-import java.util.UUID;
 import java.util.stream.Collectors;
 
 @Service
@@ -105,6 +103,61 @@ public class DonationRequestService {
                 })
                 .collect(Collectors.toList());
 
+    }
+
+    @Transactional(readOnly = true)
+    public DonationRequestResponseDto getDonationRequestById(Long requestId) {
+        DonationRequest request = donationRequestRepository.findById(requestId)
+                .orElseThrow(() -> new RuntimeException("Donation request not found with id: " + requestId));
+
+        DonationRequestResponseDto responseDto = new DonationRequestResponseDto();
+        return DonationRequestMapperMannual.toDonationResponseDto(request, responseDto);
+    }
+
+    @Transactional(readOnly = true)
+    public List<DonationRequestResponseDto> getAllDonationRequests() {
+        List<DonationRequest> requests = donationRequestRepository.findAll();
+        return requests.stream()
+                .map(mapper::toResponseDto)
+                .collect(Collectors.toList());
+    }
+
+    @Transactional(readOnly = true)
+    public List<DonationRequestResponseDto> getDonationRequestsByPatientIdAndStatus(Long patientId) {
+        List<DonationRequest> requests = donationRequestRepository.findByPatient_PatientId(patientId)
+                .stream()
+                .filter(request -> request.getStatus() == StatusEnum.REJECTED ||
+                        request.getStatus() == StatusEnum.PENDING ||
+                        request.getStatus() == StatusEnum.ADMIN_APPROVED)
+                .toList();
+
+        return requests.stream()
+                .map(mapper::toResponseDto)
+                .collect(Collectors.toList());
+    }
+
+    @Transactional(readOnly = true)
+    public List<DonationRequestResponseDto> getPatientApprovedRequestsByPatientId(Long patientId) {
+        List<DonationRequest> requests = donationRequestRepository.findByPatient_PatientId(patientId)
+                .stream()
+                .filter(request -> request.getStatus() == StatusEnum.PATIENT_APPROVED)
+                .toList();
+
+        return requests.stream()
+                .map(request -> {
+                    DonationRequestResponseDto dto = new DonationRequestResponseDto();
+                    return DonationRequestMapperMannual.toDonationResponseDto(request, dto);
+                })
+                .collect(Collectors.toList());
+    }
+
+    @Transactional(readOnly = true)
+    public List<DonationRequestResponseDto> getApprovedDonationRequests() {
+        List<DonationRequest> approvedRequests = donationRequestRepository
+                .findByStatus(StatusEnum.ADMIN_APPROVED);
+        return approvedRequests.stream()
+                .map(mapper::toResponseDto)
+                .collect(Collectors.toList());
     }
 
     public List<DonationRequestResponseDto> getPatientAcceptedDonationRequests() {

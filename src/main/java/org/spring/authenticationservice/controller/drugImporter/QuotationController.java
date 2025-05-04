@@ -5,12 +5,9 @@ import org.spring.authenticationservice.Service.drugImporter.QuotationService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
+
 import java.util.List;
 
 @RestController
@@ -90,6 +87,18 @@ public class QuotationController {
 //        validateDrugImporter(drugImporterId);
         List<QuotationDTO> quotations = quotationService.getAllQuotationsByDrugImporterId(drugImporterId);
         return new ResponseEntity<>(quotations, HttpStatus.OK);
+    }
+
+    @GetMapping("/request/{requestId}")
+    public ResponseEntity<List<QuotationDTO>> getAllQuotationsByRequestId(@PathVariable Long requestId) {
+        List<QuotationDTO> quotations = quotationService.getAllQuotationsByRequestId(requestId);
+        return new ResponseEntity<>(quotations, HttpStatus.OK);
+    }
+
+    @PutMapping("/request/{requestId}/reject-pending")
+    public ResponseEntity<Void> rejectPendingQuotations(@PathVariable Long requestId) {
+        quotationService.rejectPendingQuotationsByRequestId(requestId);
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 
     @PostMapping("/{id}/send")
