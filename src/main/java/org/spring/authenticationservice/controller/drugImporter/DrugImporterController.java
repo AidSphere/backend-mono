@@ -72,6 +72,31 @@ public class DrugImporterController {
         return ResponseEntity.status(HttpStatus.CREATED).body(response);
     }
 
+    @GetMapping("/{importerId}")
+    public ResponseEntity<ApiResponse<DrugImporterResponse>> getDrugImporterById(
+            @PathVariable Long importerId) throws Exception {
+
+        DrugImporter drugImporter = drugImporterService.findById(importerId);
+        DrugImporterResponse response = new DrugImporterResponse();
+
+        response.setId(drugImporter.getId());
+        response.setEmail(drugImporter.getEmail());
+        response.setName(drugImporter.getName());
+        response.setPhone(drugImporter.getPhone());
+        response.setAddress(drugImporter.getAddress());
+        response.setLicenseNumber(drugImporter.getLicenseNumber());
+        response.setNicotineProofFilePath(drugImporter.getNicotineProofUrl());
+        response.setLicenseProofFilePath(drugImporter.getLicenseProofUrl());
+
+        return ResponseEntity.ok(ApiResponse.<DrugImporterResponse>builder()
+                .timestamp(LocalDateTime.now())
+                .status(HttpStatus.OK.value())
+                .message("Drug Importer Retrieved Successfully")
+                .data(response)
+                .path(getCurrentRequestPath())
+                .build());
+    }
+
 
 
 //    /**

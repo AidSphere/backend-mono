@@ -22,6 +22,7 @@ import org.spring.authenticationservice.repository.security.UserRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.math.BigDecimal;
 import java.net.URI;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
@@ -89,6 +90,30 @@ public class DonationRequestService {
         return pendingRequests.stream()
                 .map(mapper::toResponseDto)
                 .collect(Collectors.toList());
+    }
+
+    @Transactional(readOnly = true)
+    public List<DonationRequestResponseDto> getQuotationIssuedRequests() {
+        List<DonationRequest> quotationIssuedRequests = donationRequestRepository
+                .findByStatus(StatusEnum.QUOTATION_ISSUED);
+        return quotationIssuedRequests.stream()
+                .map(request -> {
+                    DonationRequestResponseDto dto = new DonationRequestResponseDto();
+                    return DonationRequestMapperMannual.toDonationResponseDto(request, dto);
+                })
+                .collect(Collectors.toList());
+    }
+
+    @Transactional
+    public DonationRequestResponseDto updateDefaultPrice(Long requestId, BigDecimal defaultPrice) {
+        DonationRequest request = donationRequestRepository.findById(requestId)
+                .orElseThrow(() -> new RuntimeException("Donation request not found"));
+
+        request.setDefaultPrice(defaultPrice);
+        DonationRequest savedRequest = donationRequestRepository.save(request);
+
+        DonationRequestResponseDto responseDto = new DonationRequestResponseDto();
+        return DonationRequestMapperMannual.toDonationResponseDto(savedRequest, responseDto);
     }
 
     @Transactional(readOnly = true)
