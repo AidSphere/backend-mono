@@ -1,10 +1,14 @@
 package org.spring.authenticationservice.DTO.security;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
-import java.util.ArrayList;
-import java.util.List;
 
+@Data
+@AllArgsConstructor
+@NoArgsConstructor
 public class RegisterUserDto {
     @JsonProperty("email")
     private String email;
@@ -13,25 +17,4 @@ public class RegisterUserDto {
     @JsonProperty("role")
     private String role;
 
-    public String getRole() {
-        return role;
-    }
-
-    public void setRoles(String roles) {
-        this.role = roles;
-    }
-
-    public String getEmail() {
-        return email;
-    }
-    public void setEmail(String username) {
-        this.email = username;
-    }
-
-    public String getPassword() {
-        return password;
-    }
-    public void setPassword(String password) {
-        this.password = password;
-    }
 }

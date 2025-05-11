@@ -12,6 +12,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -35,8 +36,7 @@ public class DonationRequestController {
     }
 
 
-
-    @PutMapping("/update/{requestId}")
+    @PutMapping("/{requestId}")
     public ResponseEntity<ApiResponse<?>> updateDonationRequest(
             @PathVariable Long requestId,
             @Valid @RequestBody DonationRequestUpdateDto dto) {
@@ -58,6 +58,70 @@ public class DonationRequestController {
                 .timestamp(LocalDateTime.now())
                 .status(HttpStatus.OK.value())
                 .message("Donation Request Deleted Successfully")
+                .build());
+    }
+
+    @GetMapping
+    public ResponseEntity<ApiResponse<?>> getAllDonationRequests() {
+        List<DonationRequestResponseDto> requests = donationRequestService.getAllDonationRequests();
+        return ResponseEntity.ok(ApiResponse.builder()
+                .timestamp(LocalDateTime.now())
+                .status(HttpStatus.OK.value())
+                .message("Donation Requests Retrieved Successfully")
+                .data(requests)
+                .build());
+    }
+
+    @GetMapping("/{requestId}")
+    public ResponseEntity<ApiResponse<?>> getDonationRequestById(@PathVariable Long requestId) {
+        var responseDto = donationRequestService.getDonationRequestById(requestId);
+        return ResponseEntity.ok(ApiResponse.builder()
+                .timestamp(LocalDateTime.now())
+                .status(HttpStatus.OK.value())
+                .message("Donation Request Retrieved Successfully")
+                .data(responseDto)
+                .build());
+    }
+
+    // get donation requests of a patient (only REJECTED, PENDING, ADMIN_APPROVED)
+    @GetMapping("/patient/{patientId}")
+    public ResponseEntity<ApiResponse<?>> getDonationRequestsByPatient(@PathVariable Long patientId) {
+        List<DonationRequestResponseDto> requests = donationRequestService.getDonationRequestsByPatientIdAndStatus(patientId);
+
+        return ResponseEntity.ok(ApiResponse.builder()
+                .timestamp(LocalDateTime.now())
+                .status(HttpStatus.OK.value())
+                .message("Patient's Donation Requests Retrieved Successfully")
+                .data(requests)
+                .build());
+    }
+
+    // get donation requests of a patient (only ADMIN_APPROVED)
+    @GetMapping("/patient/{patientId}/patient-approved")
+    public ResponseEntity<ApiResponse<?>> getPatientApprovedRequestsByPatient(@PathVariable Long patientId) {
+        List<DonationRequestResponseDto> requests = donationRequestService.getPatientApprovedRequestsByPatientId(patientId);
+
+        return ResponseEntity.ok(ApiResponse.builder()
+                .timestamp(LocalDateTime.now())
+                .status(HttpStatus.OK.value())
+                .message("Patient's Approved Donation Requests Retrieved Successfully")
+                .data(requests)
+                .build());
+    }
+
+
+
+    //admin approved
+    @GetMapping("/approved")
+    public ResponseEntity<ApiResponse<?>> getApprovedDonations() {
+        List<DonationRequestResponseDto> approvedRequests =
+                donationRequestService.getApprovedDonationRequests();
+
+        return ResponseEntity.ok(ApiResponse.builder()
+                .timestamp(LocalDateTime.now())
+                .status(HttpStatus.OK.value())
+                .message("Approved Donation Requests Retrieved Successfully")
+                .data(approvedRequests)
                 .build());
     }
 
@@ -87,6 +151,46 @@ public class DonationRequestController {
                 .data(pendingRequests)
                 .build());
     }
+
+    @GetMapping("/patient-accepted")
+    public ResponseEntity<ApiResponse<?>> getPatientAcceptedDonations() {
+        List<DonationRequestResponseDto> acceptedRequests =
+                donationRequestService.getPatientAcceptedDonationRequests();
+
+        return ResponseEntity.ok(ApiResponse.builder()
+                .timestamp(LocalDateTime.now())
+                .status(HttpStatus.OK.value())
+                .message("Patient Accepted Donation Requests Retrieved Successfully")
+                .data(acceptedRequests)
+                .build());
+    }
+
+    @GetMapping("/quotation-issued")
+    public ResponseEntity<ApiResponse<?>> getQuotationIssuedRequests() {
+        List<DonationRequestResponseDto> requests = donationRequestService.getQuotationIssuedRequests();
+
+        return ResponseEntity.ok(ApiResponse.builder()
+                .timestamp(LocalDateTime.now())
+                .status(HttpStatus.OK.value())
+                .message("Quotation Issued Requests Retrieved Successfully")
+                .data(requests)
+                .build());
+    }
+
+    @PutMapping("/{requestId}/default-price")
+    public ResponseEntity<ApiResponse<?>> updateDonationRequestDefaultPrice(
+            @PathVariable Long requestId,
+            @RequestBody BigDecimal defaultPrice) {
+        DonationRequestResponseDto responseDto = donationRequestService.updateDefaultPrice(requestId, defaultPrice);
+
+        return ResponseEntity.ok(ApiResponse.builder()
+                .timestamp(LocalDateTime.now())
+                .status(HttpStatus.OK.value())
+                .message("Donation Request Default Price Updated Successfully")
+                .data(responseDto)
+                .build());
+    }
+
     @PutMapping("/{requestId}/approve")
     public ResponseEntity<ApiResponse<?>> confirmDonationRequest(
             @PathVariable Long requestId,

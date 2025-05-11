@@ -17,5 +17,6 @@ public class QuotationDTO {
     private Double discount;
     private LocalDateTime createdDate;
     private LocalDateTime updatedDate;
+    private String status;
     private List<QuotationMedicinePriceDTO> medicinePrices;
 }

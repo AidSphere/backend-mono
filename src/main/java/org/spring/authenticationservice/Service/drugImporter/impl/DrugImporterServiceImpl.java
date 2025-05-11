@@ -1,15 +1,20 @@
 package org.spring.authenticationservice.Service.drugImporter.impl;
 
+import lombok.AllArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.spring.authenticationservice.DTO.drugImporter.DrugImporterRegisterRequest;
 import org.spring.authenticationservice.DTO.drugImporter.DrugImporterUpdateRequest;
 
+import org.spring.authenticationservice.DTO.security.RegisterUserDto;
 import org.spring.authenticationservice.Service.drugImporter.DrugImporterService;
+import org.spring.authenticationservice.Service.security.AuthService;
 import org.spring.authenticationservice.Service.security.EmailService;
+import org.spring.authenticationservice.Service.security.JwtService;
 import org.spring.authenticationservice.exception.InvalidTokenException;
 import org.spring.authenticationservice.exception.ResourceNotFoundException;
 import org.spring.authenticationservice.model.drugImporter.DrugImporter;
+import org.spring.authenticationservice.model.security.AccessControl;
 import org.spring.authenticationservice.model.security.Role;
 import org.spring.authenticationservice.model.security.User;
 import org.spring.authenticationservice.repository.drugImporter.DrugImporterRepository;
@@ -21,42 +26,35 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
-import java.util.UUID;
+import java.util.*;
 
 /**
  * Implementation of the DrugImporterService interface
  */
 @Service
+@AllArgsConstructor
 public class DrugImporterServiceImpl implements DrugImporterService {
 
     private static final Logger log = LoggerFactory.getLogger(DrugImporterServiceImpl.class);
 
 
-    @Autowired
+
     private DrugImporterRepository drugImporterRepository;
 
-    @Autowired
     private UserRepository userRepository;
 
-    @Autowired
     private RoleRepository roleRepository;
 
-    @Autowired
-    private PasswordEncoder passwordEncoder;
-
-    @Autowired
     private EmailService emailService;
+    private PasswordEncoder encoder;
+    private JwtService jwtService;
+    private AuthService authService;
+
 
     @Override
     @Transactional
     public DrugImporter registerDrugImporter(DrugImporterRegisterRequest request) throws Exception {
         log.info("Registering new drug importer with email: {}", request.getEmail());
-
-
-
 
         // Check if email is already in use
         if (userRepository.existsByEmail(request.getEmail())) {
@@ -70,6 +68,7 @@ public class DrugImporterServiceImpl implements DrugImporterService {
                 .phone(request.getPhone())
                 .address(request.getAddress())
                 .licenseNumber(request.getLicenseNumber())
+                .email(request.getEmail())
                 .website(request.getWebsite())
                 .nic(request.getNic())
                 .additionalText(request.getAdditionalText())
@@ -79,6 +78,14 @@ public class DrugImporterServiceImpl implements DrugImporterService {
 
         // Save to database
         DrugImporter savedDrugImporter = drugImporterRepository.save(drugImporter);
+
+        //need to setup seperate function later
+        RegisterUserDto userDto = new RegisterUserDto();
+        userDto.setEmail(request.getEmail());
+        userDto.setPassword(request.getPassword());
+        userDto.setRole("DRUG_IMPORTER");
+        authService.RegisterUser(userDto);
+
         log.info("Drug importer registered successfully with ID: {}", savedDrugImporter.getId());
 
         return savedDrugImporter;
@@ -130,6 +137,72 @@ public class DrugImporterServiceImpl implements DrugImporterService {
     public List<DrugImporter> findAll() {
         return drugImporterRepository.findAll();
     }
+
+    @Override
+    public DrugImporter registerDrugImporterByAdmin(DrugImporterRegisterRequest registerDto) throws Exception {
+        // Check if user already exists
+        if (userRepository.existsByEmail(registerDto.getEmail())) {
+            throw new RuntimeException("User already exists with email: " + registerDto.getEmail());
+        }
+
+        // Create and save drug importer
+        DrugImporter importer = DrugImporter.builder()
+                .name(registerDto.getName())
+                .email(registerDto.getEmail())
+                .phone(registerDto.getPhone())
+                .licenseNumber(registerDto.getLicenseNumber())
+                .address(registerDto.getAddress())
+                .build();
+
+        drugImporterRepository.save(importer);
+
+        // Generate default password: firstName@phone
+        String defaultPassword = registerDto.getName() + "@" + registerDto.getPhone();
+
+        // Create and save user
+        User user = new User();
+        user.setEmail(registerDto.getEmail());
+        user.setPassword(encoder.encode(defaultPassword));
+        Role userRole = roleRepository.findByName("DRUG_IMPORTER");
+        user.getRoles().add(userRole);
+
+        String activationToken = jwtService.generateActivationToken(user.getEmail());
+        userRepository.save(user);
+
+        // Send activation email
+        Map<String, String> emailBody = Map.of(
+                "to", user.getEmail(),
+                "name", importer.getName(),
+                "activationLink", "localhost:8080/activate?token=" + activationToken
+        );
+
+        try {
+            String mailResponse = emailService.sendEmail("activation", emailBody);
+            System.out.println(mailResponse);
+        } catch (Exception e) {
+            throw new Exception("Email could not be sent");
+        }
+
+        return importer;
+    }
+
+    @Override
+    public List<DrugImporter> getPendingDrugImporters() throws ResourceNotFoundException {
+        List<User> pendingUsers = Optional.ofNullable(userRepository.findByAdminApproval(AccessControl.PENDING))
+                .orElse(Collections.emptyList());
+        if (pendingUsers.isEmpty()) {
+            throw new ResourceNotFoundException("No pending users found");
+        }
+        List<DrugImporter> pendingDrugImporters = new ArrayList<>();
+        for (User user : pendingUsers) {
+            drugImporterRepository.findByEmail(user.getEmail()).ifPresent(pendingDrugImporters::add);
+        }
+        if (pendingDrugImporters.isEmpty()) {
+            throw new ResourceNotFoundException("No pending drug importers found");
+        }
+        return pendingDrugImporters;
+    }
+
 
 //    @Override
 //    @Transactional

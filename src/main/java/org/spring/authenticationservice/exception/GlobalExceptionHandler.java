@@ -82,6 +82,18 @@ public class GlobalExceptionHandler {
                         .path(request.getDescription(false).replace("uri=", ""))
                         .build());
     }
+    @ExceptionHandler(UserAlreadyExistedException.class)
+    public ResponseEntity<ApiResponse<Object>> handleUserAlreadyExisted(UserAlreadyExistedException ex, WebRequest request) {
+        log.error("User already existed: {}", ex.getMessage(), ex);
+        return ResponseEntity.status(HttpStatus.CONFLICT)
+                .body(ApiResponse.builder()
+                        .timestamp(LocalDateTime.now())
+                        .status(HttpStatus.CONFLICT.value())
+                        .message("User already existed")
+                        .error(ex.getMessage())
+                        .path(request.getDescription(false).replace("uri=", ""))
+                        .build());
+    }
 
 //    general fallback exception
 
